@@ -2,7 +2,7 @@
 
 Split-K and Stream-K schedules for poorly occupied GEMMs.
 
-3 AITER implementation references; 0 historical experience cards.
+4 AITER implementation references; 0 historical experience cards.
 
 ## AITER implementations
 
@@ -12,6 +12,7 @@ Each page pins its source revision. Source references describe implementations a
 | --- | --- |
 | asm | [Splitk streamk gemm — AITER asm](backend/asm_aiter.md) |
 | flydsl | [Splitk streamk gemm — AITER flydsl](backend/flydsl_aiter.md) |
+| opus | [OPUS Split-K: workspace, cluster launch and fused reduction](backend/opus_aiter.md) |
 | triton | [Splitk streamk gemm — AITER triton](backend/triton_aiter.md) |
 
 ## Optimization experience

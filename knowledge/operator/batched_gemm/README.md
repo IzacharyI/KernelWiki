@@ -2,7 +2,7 @@
 
 Batched matrix products and head-wise projection variants.
 
-5 AITER implementation references; 0 historical experience cards.
+6 AITER implementation references; 0 historical experience cards.
 
 ## AITER implementations
 
@@ -14,6 +14,7 @@ Each page pins its source revision. Source references describe implementations a
 | ck | [Batched matrix multiplication — AITER ck](backend/ck_aiter.md) |
 | flydsl | [Batched matrix multiplication — AITER flydsl](backend/flydsl_aiter.md) |
 | gluon | [Batched matrix multiplication — AITER gluon](backend/gluon_aiter.md) |
+| opus | [OPUS BMM: exact-id BF16 and MXFP8 variants](backend/opus_aiter.md) |
 | triton | [Batched matrix multiplication — AITER triton](backend/triton_aiter.md) |
 
 ## Optimization experience

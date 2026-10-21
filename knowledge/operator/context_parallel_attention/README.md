@@ -2,7 +2,15 @@
 
 Attention split across context-parallel ranks and output merging.
 
-0 AITER implementation references; 0 historical experience cards.
+1 AITER implementation references; 0 historical experience cards.
+
+## AITER implementations
+
+Each page pins its source revision. Source references describe implementations and validation routes; they do not establish a measured performance ranking.
+
+| Backend / provider entry | Reference |
+| --- | --- |
+| aiter | [Round-robin context-parallel MLA and index selection](backend/aiter_aiter.md) |
 
 ## Optimization experience
 

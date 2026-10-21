@@ -21,6 +21,7 @@ Each page pins its source revision. Source references describe implementations a
 ### Implementation notes
 
 - [AITER MLA: cache layout, causal queries and backend dispatch](backend/aiter_notes.md)
+- [Native HK MLA: v3.2 and v4.0 decode pipelines](backend/hip_notes.md)
 
 ## Optimization experience
 

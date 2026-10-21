@@ -20,6 +20,8 @@ Each page pins its source revision. Source references describe implementations a
 ### Implementation notes
 
 - [Scoring and selection in the attention indexer](backend/flydsl_notes.md)
+- [Sparse block selection: scoring, top-k and fused CP selection](backend/hip_notes.md)
+- [OPUS MXFP4 indexer: architecture layouts and dynamic schedules](backend/opus_notes.md)
 
 ## Optimization experience
 

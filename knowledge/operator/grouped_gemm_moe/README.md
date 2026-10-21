@@ -22,6 +22,7 @@ Each page pins its source revision. Source references describe implementations a
 ### Implementation notes
 
 - [AITER FlyDSL MoE: requested tiles versus executed tiles](backend/flydsl_notes.md)
+- [OPUS MoE: stage-1 schedules and stage-2 output strategies](backend/opus_notes.md)
 
 ## Optimization experience
 

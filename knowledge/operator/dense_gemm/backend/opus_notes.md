@@ -25,6 +25,21 @@ Inputs are K-contiguous and Y is N-contiguous. Family-specific scale, bias, work
 
 The upstream documentation distinguishes plain A8W8, blockscale and preshuffled-blockscale GEMM families from MXFP8 BMM. Some architecture tables are intentionally empty. Validate a `kid` against its instance architecture and family rather than inferring capabilities from its integer value.
 
+## Native A16W16 pipeline variants
+
+The following device bodies are additional source references at AITER `b3ad6c461703`. Select an exact registered instance and its traits before treating a native schedule as a runnable candidate.
+
+| Native body | Scheduling distinction |
+| --- | --- |
+| [gfx942 single-buffer pipeline](https://github.com/ROCm/aiter/blob/b3ad6c461703110dc36286265c16e453ef0e2dd2/csrc/opus_gemm/include/gfx942/a16w16/opus_gemm_pipeline_a16w16_kbuf1.cuh) | Single-buffer K-loop family. |
+| [gfx942 two-buffer pipeline](https://github.com/ROCm/aiter/blob/b3ad6c461703110dc36286265c16e453ef0e2dd2/csrc/opus_gemm/include/gfx942/a16w16/opus_gemm_pipeline_a16w16_kbuf2v.cuh) | A different buffering and prefetch schedule. |
+| [gfx942 cooperative K-waves](https://github.com/ROCm/aiter/blob/b3ad6c461703110dc36286265c16e453ef0e2dd2/csrc/opus_gemm/include/gfx942/a16w16/opus_gemm_pipeline_a16w16_wave_k_coop.cuh) | Work decomposition across K waves. |
+| [gfx950 persistent pipeline](https://github.com/ROCm/aiter/blob/b3ad6c461703110dc36286265c16e453ef0e2dd2/csrc/opus_gemm/include/gfx950/opus_gemm_pipeline_a16w16_persistent_gfx950.cuh) | Persistent tile scheduling. |
+| [gfx950 flat-M pipeline](https://github.com/ROCm/aiter/blob/b3ad6c461703110dc36286265c16e453ef0e2dd2/csrc/opus_gemm/include/gfx950/opus_gemm_pipeline_a16w16_flatmm_gfx950.cuh) | A separate flat-M specialization. |
+| [gfx950 4-GiB-safe persistent pipeline](https://github.com/ROCm/aiter/blob/b3ad6c461703110dc36286265c16e453ef0e2dd2/csrc/opus_gemm/include/gfx950/opus_gemm_pipeline_a16w16_persistent_4g_safe_gfx950.cuh) | Addressing variant for larger byte ranges. |
+
+For clustered TDM and fused Split-K reduction, see [OPUS Split-K](../../splitk_streamk_gemm/backend/opus_aiter.md). For batch scheduling and MXFP8 scale layouts, see [OPUS BMM](../../batched_gemm/backend/opus_aiter.md). These distinctions describe implementation choices; they are not a performance ranking.
+
 ## Benchmark implications
 
 Benchmarking a hand-selected exact `kid` answers a different question from benchmarking `aiter.gemm_a16w16`, which goes through the global multi-backend dispatcher. A useful result records both the explicit instance and the public dispatch behavior. Include split-K workspace/reduction cost and any required weight preparation.

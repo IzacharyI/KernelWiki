@@ -22,6 +22,7 @@ Each page pins its source revision. Source references describe implementations a
 ### Implementation notes
 
 - [FP4 GEMM input and output contracts](backend/asm_notes.md)
+- [OPUS FP8 GEMM: scale and preshuffle families](backend/opus_notes.md)
 
 ## Optimization experience
 

@@ -86,6 +86,14 @@ Related tests for this operator family are listed below. Select the entry point 
 - [op_tests/triton_tests/rope/test_fused_qk_norm_rope_gate_fp8_quant.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/triton_tests/rope/test_fused_qk_norm_rope_gate_fp8_quant.py)
 - [op_tests/triton_tests/rope/test_fused_qkv_split_qk_rope.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/triton_tests/rope/test_fused_qkv_split_qk_rope.py)
 
+## Additional Q/K normalization and quantization fusion
+
+The [fused Q/K RMSNorm wrapper](https://github.com/ROCm/aiter/blob/b3ad6c461703110dc36286265c16e453ef0e2dd2/aiter/ops/fused_qk_rmsnorm_group_quant.py) and [native kernel body](https://github.com/ROCm/aiter/blob/b3ad6c461703110dc36286265c16e453ef0e2dd2/csrc/kernels/fused_qk_rmsnorm_group_quant.cu) expose preparation variants for quantized attention inputs. They were previously filed with standalone normalization rather than this attention-fusion family.
+
+`fused_qk_rmsnorm_group_quant` supports a quantized-Q path with FP8 or packed FP4 output when the caller supplies output and scale buffers. Packed FP4 rejects transposed scales at this snapshot. Per-token quantization uses the separate `fused_qk_rmsnorm_per_token_quant` entry; passing group size zero through the group-quantized path is rejected. These routines do not by themselves imply RoPE or a paged cache write: compare the actual fused boundary required by the attention consumer.
+
+Validate the Q/K normalization results, quantized Q payload and scales together using the [group-quant tests](https://github.com/ROCm/aiter/blob/b3ad6c461703110dc36286265c16e453ef0e2dd2/op_tests/test_fused_qk_rmsnorm_group_quant.py) and [per-token tests](https://github.com/ROCm/aiter/blob/b3ad6c461703110dc36286265c16e453ef0e2dd2/op_tests/test_fused_qk_rmsnorm_per_token_quant.py). This addition is pinned to AITER `b3ad6c461703` and adds no GPU measurements.
+
 ## Performance and validation
 
 Validate Q and K outputs plus modified cache locations. Include position tails, partial rotary dimensions and the quantization scale layout.

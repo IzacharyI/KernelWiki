@@ -6,7 +6,7 @@
 
 ## Reading a backend page
 
-`<backend>_aiter.md` describes the pinned AITER source snapshot with entry points, parameter names, configuration references and related tests. Symbol lists include support functions; they are not counts of independently launchable kernels. ASM code objects are grouped by family, and may include compiled DSL output.
+`<backend>_aiter.md` describes the pinned AITER source snapshot with entry points, dispatch/shape contracts, configuration references and related tests. Some pages explain a workload variant of a shared implementation; others list source files and symbols. Symbol lists include support functions; they are not counts of independently launchable kernels. Native `.cuh` pipelines belong with their wrappers, instance traits and launch plans. ASM code objects are grouped by family, and may include compiled DSL output.
 
 `<backend>_notes.md` explains selected implementation decisions in detail. `<backend>.md` preserves older GEAK material, including dated measurements and upstream reports. Read the source date before applying a historical recommendation.
 

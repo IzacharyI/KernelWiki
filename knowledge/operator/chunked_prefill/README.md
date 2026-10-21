@@ -2,7 +2,15 @@
 
 Prompt chunks attending to cached prefixes.
 
-0 AITER implementation references; 0 historical experience cards.
+1 AITER implementation references; 0 historical experience cards.
+
+## AITER implementations
+
+Each page pins its source revision. Source references describe implementations and validation routes; they do not establish a measured performance ranking.
+
+| Backend / provider entry | Reference |
+| --- | --- |
+| triton | [Chunked prefill over an existing paged prefix](backend/triton_aiter.md) |
 
 ## Optimization experience
 
