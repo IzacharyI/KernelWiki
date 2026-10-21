@@ -13,7 +13,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-from kernel_patch._store.curate import collapse_by_direction, demote_hinted                      # noqa: E402
+from kernelwiki._store.curate import collapse_by_direction, demote_hinted                      # noqa: E402
 
 
 def _item(name, direction="", hint=""):

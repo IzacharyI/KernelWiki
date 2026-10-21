@@ -45,8 +45,8 @@ from __future__ import annotations
 
 import time
 
-from kernel_patch._store.retract import existing_files
-from kernel_patch._store.store_local import KBStoreError
+from kernelwiki._store.retract import existing_files
+from kernelwiki._store.store_local import KBStoreError
 
 # The four things that can happen when a record is taken off the shelf and run. They are counted
 # separately because they mean opposite things to a retire pass: `failed` says the claim did not

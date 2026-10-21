@@ -11,6 +11,8 @@ evidence: source_review
 
 # AITER Triton RMSNorm: grid and row-width dispatch
 
+[Runnable source bundle](../../../../kernels/rmsnorm/triton/aiter_row_tiled/README.md): `rmsnorm/triton/aiter_row_tiled`. The kernel body and naming helper are preserved from the pinned source; the standalone wrapper and tests are included. GPU verification of the extracted bundle is pending.
+
 The current wrapper has separate policies for generic rows, very wide rows and large-M/small-N workloads. A single “persistent one-workgroup-per-CU” description no longer covers all forward calls.
 
 ## How the implementation selects work

@@ -17,11 +17,11 @@ import sys
 import pytest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-from kernel_patch._store.attest import (HISTORY_LIMIT, RECENT_WINDOW, attest_session,            # noqa: E402
+from kernelwiki._store.attest import (HISTORY_LIMIT, RECENT_WINDOW, attest_session,            # noqa: E402
                        attestation_ok, attestations_of, attested_document, carry_attestations,
                        empty_attestations, record_attestation, recent_verdicts, retire_hint,
                        should_retire)
-from kernel_patch._store.store_local import KBStoreError, LocalKBStore                           # noqa: E402
+from kernelwiki._store.store_local import KBStoreError, LocalKBStore                           # noqa: E402
 
 
 def _store(tmp_path):

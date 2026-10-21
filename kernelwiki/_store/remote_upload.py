@@ -42,7 +42,7 @@ def _load_client():
     except ImportError:
         pass
     try:  # our vendored copy of the single file
-        from kernel_patch._store.store_client import KBStoreClient, KBStoreError  # type: ignore
+        from kernelwiki._store.store_client import KBStoreClient, KBStoreError  # type: ignore
         return KBStoreClient, KBStoreError
     except ImportError as e:
         raise SystemExit(
@@ -62,7 +62,7 @@ class _LocalBackend:
     """
 
     def __init__(self, root: str):
-        from kernel_patch._store.store_local import LocalKBStore  # noqa: PLC0415 - optional, only for --local
+        from kernelwiki._store.store_local import LocalKBStore  # noqa: PLC0415 - optional, only for --local
         self.store = LocalKBStore(root)
         self.root = self.store.root
         self._staged = {}

@@ -1,5 +1,9 @@
 # rmsnorm
 
+## Reusable source
+
+[AITER row-tiled Triton RMSNorm](../../../kernels/rmsnorm/triton/aiter_row_tiled/README.md) includes kernel code, a standalone wrapper, launch settings, correctness checks and a benchmark. It is a source reference for M > 8192 and N <= 2048 on gfx942/gfx950; local GPU verification is pending.
+
 4 current AITER implementation references; 0 historical experience cards.
 
 ## AITER implementations

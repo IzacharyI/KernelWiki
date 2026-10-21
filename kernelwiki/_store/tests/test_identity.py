@@ -15,7 +15,7 @@ import sys
 import pytest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-from kernel_patch._store import identity as kbid                                                 # noqa: E402
+from kernelwiki._store import identity as kbid                                                 # noqa: E402
 
 
 @pytest.mark.parametrize("raw,expected", [

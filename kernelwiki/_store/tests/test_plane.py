@@ -14,8 +14,8 @@ import sys
 import types
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-from kernel_patch._store import plane as plane_mod                                               # noqa: E402
-from kernel_patch._store.plane import open_plane, read_planes                                    # noqa: E402
+from kernelwiki._store import plane as plane_mod                                               # noqa: E402
+from kernelwiki._store.plane import open_plane, read_planes                                    # noqa: E402
 
 
 def _args(**kw):
@@ -35,7 +35,7 @@ class _FakeRemote:
         class _Store:
             pass
 
-        module = types.ModuleType("kernel_patch._store.store_remote")
+        module = types.ModuleType("kernelwiki._store.store_remote")
 
         class RemoteKBStore:
             @staticmethod
@@ -43,7 +43,7 @@ class _FakeRemote:
                 return (_Store() if remote.ok else None), remote.why
 
         module.RemoteKBStore = RemoteKBStore
-        monkeypatch.setitem(sys.modules, "kernel_patch._store.store_remote", module)
+        monkeypatch.setitem(sys.modules, "kernelwiki._store.store_remote", module)
 
 
 def _names(planes):
@@ -121,7 +121,7 @@ def test_a_read_never_carries_a_promotion_floor(tmp_path, monkeypatch):
 
     class _Recorder(_FakeRemote):
         def install(self, monkeypatch):
-            module = types.ModuleType("kernel_patch._store.store_remote")
+            module = types.ModuleType("kernelwiki._store.store_remote")
 
             class RemoteKBStore:
                 @staticmethod
@@ -130,7 +130,7 @@ def test_a_read_never_carries_a_promotion_floor(tmp_path, monkeypatch):
                     return object(), ""
 
             module.RemoteKBStore = RemoteKBStore
-            monkeypatch.setitem(sys.modules, "kernel_patch._store.store_remote", module)
+            monkeypatch.setitem(sys.modules, "kernelwiki._store.store_remote", module)
 
     _Recorder().install(monkeypatch)
     read_planes(_args(plane="remote", store=str(tmp_path)), "speedup")

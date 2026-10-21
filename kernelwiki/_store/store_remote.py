@@ -35,7 +35,7 @@ outranked.
 import json
 import os
 
-from kernel_patch._store.store_local import (CHAMPION_METRIC, KBStoreError, Candidate, finite_speedup,
+from kernelwiki._store.store_local import (CHAMPION_METRIC, KBStoreError, Candidate, finite_speedup,
                             safe_rel_path, validate_session_id)
 
 DEFAULT_SCAN = 25          # candidates hydrated before curation; well under the 200 rollup cap
@@ -62,7 +62,7 @@ class RemoteKBStore(object):
                  promote_floor: float = 1.0):
         """Build from KB_STORE_URL / KB_STORE_TOKEN, or return (None, reason)."""
         try:
-            from kernel_patch._store.store_client import KBStoreClient, kb_store_token, kb_store_url
+            from kernelwiki._store.store_client import KBStoreClient, kb_store_token, kb_store_url
         except ImportError as e:
             return None, "store_unavailable: " + str(e)[:120]
         if not kb_store_url() or not kb_store_token():

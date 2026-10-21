@@ -1,0 +1,10 @@
+{
+  "gfx942": {
+    "num_warps": 8,
+    "num_stages": 2
+  },
+  "gfx950": {
+    "num_warps": 8,
+    "num_stages": 2
+  }
+}

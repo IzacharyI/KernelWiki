@@ -36,7 +36,7 @@ from __future__ import annotations
 import os
 import time
 
-from kernel_patch._store.store_local import Candidate, KBStoreError, finite_speedup
+from kernelwiki._store.store_local import Candidate, KBStoreError, finite_speedup
 
 
 # Written into `value.lifecycle`. The other two values in circulation are "active" (reproduced) and

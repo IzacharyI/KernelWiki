@@ -2,6 +2,7 @@
 
 - [Operators](operator/README.md): implementations, performance evidence, numerical contracts, tuning and lessons.
 - [General knowledge](general/README.md): profiling, optimization, backend programming, hardware and reusable recipes.
+- [Kernel source collection](../kernels/README.md): complete implementations with entry points, dependencies, tests and benchmarks.
 
 ## Reading a backend page
 
@@ -16,5 +17,7 @@ Keep independently measured results, upstream-reported results and source-only o
 ## Contributing knowledge
 
 Put operator-specific implementation knowledge under `operator/<op>/backend/`; put transferable run-derived lessons under that operator's `learned_knowledge/`. Put methods that apply across operators under `general/`. Add a local navigation link and cite the relevant source or measurement. AITER implementation links should include a commit.
+
+Store reusable code as a complete source bundle under `kernels/<operator>/<backend>/<implementation>/`. Link its implementation ID from the corresponding knowledge page. Include the exact source digest with measured results; historical patch references remain historical evidence, not the current storage format. All repository documentation and comments use English.
 
 The first AITER source pass prioritizes files changed from 2026-07-21 through 2026-10-21. Older GEAK knowledge remains available. There is no scheduled update process or automatic best-kernel promotion.

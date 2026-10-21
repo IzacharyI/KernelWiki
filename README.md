@@ -7,7 +7,7 @@ An **operator-centered GPU kernel knowledge base** that documents backend implem
 | Content | Start here | Purpose |
 | --- | --- | --- |
 | Written knowledge | [Operators](knowledge/operator/README.md) · [General](knowledge/general/README.md) | Implementation details, source entry points, performance and applicability, tuning methods and lessons from previous runs |
-| Kernel patches | [Write and search API](kernel_patch/README.md) | Store, discover and download patches and tuning artifacts through the existing GEAK KB service |
+| Kernel implementations | [Source collection](kernels/README.md) · [Put, search and fetch API](kernelwiki/README.md) | Reuse complete source bundles with entry points, dependencies, correctness checks and benchmarks |
 
 ```text
 knowledge/
@@ -23,7 +23,14 @@ knowledge/
     hardware/
     quantization/
     ...
-kernel_patch/
+kernels/<operator>/<backend>/<implementation>/
+  kernel.py
+  entry.py
+  test.py
+  benchmark.py
+  metadata.yaml
+  README.md
+kernelwiki/
   client.py
 ```
 
@@ -42,25 +49,36 @@ kernel_patch/
 
 AITER is the main source of implementation knowledge. Documents include pinned links to source, configuration and tests, with the focus on the kernels themselves. Choosing the best implementation requires a specific GPU, dtype, shape/layout and comparable measurements.
 
-## Using the patch API
+## Kernel source collection
+
+The repository now stores complete kernel implementations alongside their explanatory knowledge. The first source bundle is [AITER's row-tiled Triton RMSNorm](kernels/rmsnorm/triton/aiter_row_tiled/README.md), with its kernel body, standalone entry point, launch configurations, numerical reference, correctness checks and benchmark program. It retains AITER's MIT license and pinned source attribution.
+
+This initial bundle is a source reference with upstream-reported performance. It has not been remeasured on the packaging host and is not labeled `best_known`. A best-known entry must identify exact measured cases and attach correctness/performance evidence to its source digest. See the [source-bundle contract](kernels/README.md).
+
+## Using the source API
 
 ```bash
 python -m pip install -e .
-export GEAK_KB_URL="https://your-existing-kb-service"
-# Use your existing GEAK_KB_STORE_TOKEN / KB_STORE_TOKEN configuration.
 ```
 
 ```python
-from kernel_patch import PatchClient, kernel_addresses
+from kernelwiki import KernelClient
 
-client = PatchClient.from_env()
-addresses = kernel_addresses(
-    kernel_name="_rms_norm_kernel", backend="triton", gfx="gfx950", rocm_version="7.3"
+client = KernelClient.local("kernels")
+result = client.search(
+    "rmsnorm", backend="triton", gfx="gfx950", dtype="bf16",
+    shape={"M": 16384, "N": 128},
 )
-result = client.search(canonical_ids=addresses, top_k=5)
+item = result["implementations"][0]
+client.fetch(
+    item["implementation_id"], revision=item["revision"],
+    destination="downloaded_rmsnorm",
+)
 ```
 
-The API supports `GEAK_KB_STORE_URL`, `KB_STORE_URL` and existing canonical IDs. See [kernel_patch](kernel_patch/README.md) for write and download examples, search scope and error handling. Read written knowledge directly from this repository's Markdown files; the Python package provides patch access.
+For remote candidates, set `GEAK_KB_URL` and use `KernelClient.from_env()`. The existing `GEAK_KB_STORE_URL`, `KB_STORE_URL` and token variables remain supported. `put()` uploads a complete source bundle; `fetch()` returns the same runnable directory layout. New source records use `geak:kernel_code:...` identities. The previous patch-specific Python API has been removed in version 0.2. Historical remote patch records are not modified or presented as complete source implementations.
+
+Repository entries are curated with Git. The remote service can retain multiple candidate revisions and measurement artifacts. Both use the same implementation ID, source digest and bundle revision. Read text knowledge directly from Markdown. See the [API guide](kernelwiki/README.md) for publication, search and retrieval details.
 
 ## Development checks
 

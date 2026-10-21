@@ -45,7 +45,7 @@ def open_plane(a, metric, floor, create=False):
 
     # plane in ("remote", "both")
     try:
-        from kernel_patch._store.store_remote import RemoteKBStore
+        from kernelwiki._store.store_remote import RemoteKBStore
     except ImportError as e:
         return None, None, "store_unavailable: " + str(e)[:120]
     scan = getattr(a, "scan", 25)
@@ -105,7 +105,7 @@ def _open_local(root, metric, floor, create):
     """The on-disk store, or (None, reason). Imported lazily so a box that only has this file can
     still open a remote plane."""
     try:
-        from kernel_patch._store.store_local import LocalKBStore
+        from kernelwiki._store.store_local import LocalKBStore
     except ImportError as e:
         return None, "store_unavailable: " + str(e)[:120]
     if not root or not os.path.isdir(root):

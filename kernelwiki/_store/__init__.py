@@ -18,7 +18,7 @@ This lives at the repo root rather than under kernel_workflow/scripts/ — where
 e2e_workflow imports it too, and a workflow should not have to depend on a sibling workflow's
 directory being present to read its own knowledge.
 
-The modules are imported absolutely (`from kernel_patch._store.store_local import ...`), so an entry point that is
+The modules are imported absolutely (`from kernelwiki._store.store_local import ...`), so an entry point that is
 executed as a file rather than imported has to put the repo root on sys.path first. Every such
 caller does this from its own __file__ and nothing here assumes a cwd.
 """
