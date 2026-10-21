@@ -5,11 +5,12 @@
 One file rather than two because the failure this guards against is silent. The `geak` scheme is
 CLIENT-DEFINED: the service declares no dimensions for it, does EXACT canonical-id lookup only
 (`POST /v1/kb/search` answers `search_unsupported`), and a GET that misses by one segment returns a
-plain 404 that is indistinguishable from "nothing was ever recorded here". The API doc says what
-that costs, in as many words:
+plain 404 that is indistinguishable from "nothing was ever recorded here". In translation, the
+API documentation explains the consequence:
 
-    同一个 kernel 用不同维度个数或顺序描述,会落在不同的 rollup 上,服务端无法把这种情况和
-    「两个不同的 kernel」区分开,症状是历史凭空消失。
+    Describing the same kernel with a different number or order of dimensions places it in
+    a different rollup. The service cannot distinguish this from two different kernels,
+    so the history appears to vanish.
 
 A reader and a writer that disagree by one segment therefore do not raise — the run just cold
 starts and nobody finds out. So both sides of both workflows build their address here, and nowhere
@@ -38,8 +39,8 @@ consequence to accept is that dropping the leading segments no longer yields a n
 verbatim, so widening the credential later means running a conversion rather than a prefix rewrite.
 
 THE LADDER IS WRITTEN, NOT COMPUTED. The service does no prefix aggregation — "rollup" there means
-the session index under one exact canonical id (`rollup 没有自己的 uuid,直接用 canonical_id
-寻址`), and no endpoint takes a prefix or depth. A coarse rung answers a read only if somebody
+the session index under one exact canonical id (a rollup has no UUID of its own and is addressed
+directly by canonical_id), and no endpoint takes a prefix or depth. A coarse rung answers a read only if somebody
 wrote it. So `canonical_ids()` returns every rung, most specific first, and writers must publish to
 ALL of them unconditionally. Publishing conditionally is worse than not publishing: the coarse page
 becomes a biased subset of runs and ranks worse than an empty one.
@@ -237,7 +238,7 @@ def e2e_identity(model: str, gfx: str, framework: str, framework_version: str, p
         `--plane both`. A fourth level buys +33% write bytes and +33% failure surface on an
         all-or-none ladder, for a dimension whose value is 1 on nearly every deployment.
       * A standalone `...:tp_8` page would hold ep=1 and ep=8 records with nothing in the address
-        to tell them apart. That is precisely the `两个不同的 kernel` confusion quoted at the top
+        to tell them apart. That is precisely the "two different kernels" confusion quoted at the top
         of this file, minted deliberately. Folding refuses to create that page.
 
     What that costs: ep=1 and ep=8 at the same tp meet only on the coarsest rung, where tp varies

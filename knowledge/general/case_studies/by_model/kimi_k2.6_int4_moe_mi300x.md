@@ -81,7 +81,7 @@ recipe (writes the shape-generic driver into `$EVAL_DIR`, sweeps, emits a
 **e2e Integrator** runs the tight A/B (baseline vs +tuned-config+mnbt), the engagement
 check ("Using default MoE config" gone), parity, and the Amdahl + `mem_footprint_starves_kv`
 gates — no bespoke per-model code. The measured quantity is the **ratio B/A under one
-identical 口径**, so the +16% relative win holds even when the absolute baseline differs
+identical measurement protocol**, so the +16% relative win holds even when the absolute baseline differs
 (e.g. variable-length `range_ratio` lowers both legs together).
 
 ## Lessons
@@ -91,7 +91,7 @@ identical 口径**, so the +16% relative win holds even when the absolute baseli
    weight bytes starves the KV cache and never deploys.
 3. **Pair the tuned config with a large prefill batch** so the tuned large-M buckets
    actually execute.
-4. **Report the A/B ratio, not absolute tok/s** — it survives box/口径 drift.
+4. **Report the A/B ratio, not absolute tok/s** — it remains useful across machines and measurement protocols when each A/B pair uses the same conditions.
 
 ## Cross-links
 - Operator tuning: [`../../operators/fused_moe_grouped_gemm/tuning.md`](../../../operator/fused_moe_grouped_gemm/tuning.md)
