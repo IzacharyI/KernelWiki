@@ -57,8 +57,8 @@ TTFT scaling vs `cp`; CP parity vs single-GPU; `AITER_LOG_MORE=1`; `rocprofv3` X
 
 ## Alternatives / cross-links
 [overview.md](../README.md) · [triton.md](triton.md) · [sglang_kernels.md](sglang_kernels.md) ·
-backend: [aiter](aiter.md) · `mori_rccl` (EP all-to-all) · collectives: [allgather](../../allgather/README.md) · [reduce_scatter](../../reduce_scatter/README.md) ·
-[fused_allreduce_rmsnorm](../../fused_allreduce_rmsnorm/README.md).
+backend: [aiter](aiter.md) · `mori_rccl` (EP all-to-all) · collectives: [allgather](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/allgather/README.md) · [reduce_scatter](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/reduce_scatter/README.md) ·
+[fused_allreduce_rmsnorm](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/fused_allreduce_rmsnorm/README.md).
 
 ## Sources
 - aiter comm primitives (Iris, all_gather, reduce_scatter, fused): `ROCm/aiter@a6bb49937:aiter/ops/triton/comms/` (on-box).

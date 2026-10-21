@@ -77,7 +77,7 @@ FP16/BF8/FP4 operands, **FP32 accumulate**. MXFP4 = two 4-bit values per byte + 
 ## Cross-links
 [languages/gluon](overview.md) · [languages/triton_amd](../triton_amd/overview.md) · [optimization/mfma_scheduling](../../optimization/mfma_scheduling.md) ·
 [operators/dense_gemm/backends/gluon](../../../operator/dense_gemm/backend/gluon.md) · [operators/scaled_quant_gemm/backends/gluon](../../../operator/scaled_quant_gemm/backend/gluon.md) ·
-[operators/quant_fp4_mxfp/backends/gluon](../../../operator/quant_fp4_mxfp/backend/gluon.md)
+[operators/quant_fp4_mxfp/backends/gluon](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_fp4_mxfp/backend/gluon.md)
 
 ## Sources
 - Gluon GEMM tutorial (v0→v9, ceilings, scale pipeline, env vars): https://rocm.blogs.amd.com/software-tools-optimization/gluon-gemm-tutorial/README.html

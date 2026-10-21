@@ -18,6 +18,8 @@ Follow the public Python wrapper into the launchable Triton function. Tune only 
 
 ## Scope and evidence
 
+This page selects LLM inference paths. Shared upstream files and test suites can also contain training code; use their forward cases with gradients and dropout disabled. Explicit gradient-only implementations, tests and configurations are omitted.
+
 The source links below are pinned to AITER `e9995854abbd`. **Recent** means the file changed between 2026-07-21 and this snapshot. The symbol lists and parameter names are extracted from source; they include helpers as well as entry points. They do not certify runtime dispatch, hardware support or a measured speedup.
 
 ## Implementation files and entry points
@@ -90,22 +92,12 @@ Parameters referenced in this file: `BLOCK_SIZE_K`, `BLOCK_SIZE_M`, `BLOCK_SIZE_
 
 Use the matching wrapper/config loader. These files are tuning choices, not standalone proof of a performance gain.
 
-- [aiter/ops/triton/configs/gfx1100/triton/conv/conv3d_wino_hw_f4x3_gemm/DEFAULT.json](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/configs/gfx1100/triton/conv/conv3d_wino_hw_f4x3_gemm/DEFAULT.json)
-- [aiter/ops/triton/configs/gfx1100/triton/conv/conv_wino_f4x3_gemm/DEFAULT.json](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/configs/gfx1100/triton/conv/conv_wino_f4x3_gemm/DEFAULT.json)
 - [aiter/ops/triton/configs/gfx1100/triton/gemm/gemm_a16w16/DEFAULT.json](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/configs/gfx1100/triton/gemm/gemm_a16w16/DEFAULT.json)
 - [aiter/ops/triton/configs/gfx1100/triton/gemm/gemm_a16w16/GEMM-A16W16-N=34816-K=5120.json](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/configs/gfx1100/triton/gemm/gemm_a16w16/GEMM-A16W16-N=34816-K=5120.json)
 - [aiter/ops/triton/configs/gfx1100/triton/gemm/gemm_a16w16/GEMM-A16W16-N=5120-K=17408.json](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/configs/gfx1100/triton/gemm/gemm_a16w16/GEMM-A16W16-N=5120-K=17408.json)
 - [aiter/ops/triton/configs/gfx1100/triton/gemm/gemm_a16w16/GEMM-A16W16-N=5120-K=5120.json](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/configs/gfx1100/triton/gemm/gemm_a16w16/GEMM-A16W16-N=5120-K=5120.json)
 - [aiter/ops/triton/configs/gfx1100/triton/gemm/gemm_a16w16/GEMM-A16W16-N=7168-K=5120.json](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/configs/gfx1100/triton/gemm/gemm_a16w16/GEMM-A16W16-N=7168-K=5120.json)
-- [aiter/ops/triton/configs/gfx1101/triton/conv/conv_wino_f4x3_gemm/DEFAULT.json](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/configs/gfx1101/triton/conv/conv_wino_f4x3_gemm/DEFAULT.json)
-- [aiter/ops/triton/configs/gfx1150/triton/conv/conv_wino_f4x3_gemm/DEFAULT.json](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/configs/gfx1150/triton/conv/conv_wino_f4x3_gemm/DEFAULT.json)
 - [aiter/ops/triton/configs/gfx1150/triton/gemm/gemm_a16w16/DEFAULT.json](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/configs/gfx1150/triton/gemm/gemm_a16w16/DEFAULT.json)
-- [aiter/ops/triton/configs/gfx1151/triton/conv/conv_wino_f4x3_gemm/DEFAULT.json](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/configs/gfx1151/triton/conv/conv_wino_f4x3_gemm/DEFAULT.json)
-- [aiter/ops/triton/configs/gfx1200/triton/conv/conv3d_wino_hw_f4x3_gemm/DEFAULT.json](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/configs/gfx1200/triton/conv/conv3d_wino_hw_f4x3_gemm/DEFAULT.json)
-- [aiter/ops/triton/configs/gfx1200/triton/conv/conv_wino_f4x3_gemm/DEFAULT.json](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/configs/gfx1200/triton/conv/conv_wino_f4x3_gemm/DEFAULT.json)
-- [aiter/ops/triton/configs/gfx1201/triton/conv/conv3d_wino_hw_f4x3_gemm/DEFAULT.json](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/configs/gfx1201/triton/conv/conv3d_wino_hw_f4x3_gemm/DEFAULT.json)
-- [aiter/ops/triton/configs/gfx1201/triton/conv/conv_wino_f4x3_gemm/DEFAULT.json](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/configs/gfx1201/triton/conv/conv_wino_f4x3_gemm/DEFAULT.json)
-- [aiter/ops/triton/configs/gfx1250/triton/conv/conv_wino_f4x3_gemm/DEFAULT.json](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/configs/gfx1250/triton/conv/conv_wino_f4x3_gemm/DEFAULT.json)
 - [aiter/ops/triton/configs/gfx1250/triton/gemm/gemm_a16w16/DEFAULT.json](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/configs/gfx1250/triton/gemm/gemm_a16w16/DEFAULT.json)
 - [aiter/ops/triton/configs/gfx1250/triton/gemm/gemm_a16w16/GEMM-A16W16-N=1024-K=4096.json](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/configs/gfx1250/triton/gemm/gemm_a16w16/GEMM-A16W16-N=1024-K=4096.json)
 - [aiter/ops/triton/configs/gfx1250/triton/gemm/gemm_a16w16/GEMM-A16W16-N=1024-K=7168.json](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/configs/gfx1250/triton/gemm/gemm_a16w16/GEMM-A16W16-N=1024-K=7168.json)
@@ -138,8 +130,6 @@ Use the matching wrapper/config loader. These files are tuning choices, not stan
 - [aiter/ops/triton/configs/gfx1250/triton/gemm/gemm_a16w16_persistent/GEMM-A16W16-PERSISTENT-N=2880-K=4096.json](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/configs/gfx1250/triton/gemm/gemm_a16w16_persistent/GEMM-A16W16-PERSISTENT-N=2880-K=4096.json)
 - [aiter/ops/triton/configs/gfx1250/triton/gemm/gemm_a16w16_persistent/GEMM-A16W16-PERSISTENT-N=5120-K=2880.json](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/configs/gfx1250/triton/gemm/gemm_a16w16_persistent/GEMM-A16W16-PERSISTENT-N=5120-K=2880.json)
 - [aiter/ops/triton/configs/gfx1250/triton/gemm/grouped/DEFAULT.json](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/configs/gfx1250/triton/gemm/grouped/DEFAULT.json)
-- [aiter/ops/triton/configs/gfx942/triton/conv/conv3d_wino_hw_f4x3_gemm/DEFAULT.json](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/configs/gfx942/triton/conv/conv3d_wino_hw_f4x3_gemm/DEFAULT.json)
-- [aiter/ops/triton/configs/gfx942/triton/conv/conv_wino_f4x3_gemm/DEFAULT.json](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/configs/gfx942/triton/conv/conv_wino_f4x3_gemm/DEFAULT.json)
 - [aiter/ops/triton/configs/gfx942/triton/gemm/gemm_a16w16/DEFAULT.json](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/configs/gfx942/triton/gemm/gemm_a16w16/DEFAULT.json)
 - [aiter/ops/triton/configs/gfx942/triton/gemm/gemm_a16w16/GEMM-A16W16-N=10240-K=8192.json](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/configs/gfx942/triton/gemm/gemm_a16w16/GEMM-A16W16-N=10240-K=8192.json)
 - [aiter/ops/triton/configs/gfx942/triton/gemm/gemm_a16w16/GEMM-A16W16-N=11008-K=4096.json](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/configs/gfx942/triton/gemm/gemm_a16w16/GEMM-A16W16-N=11008-K=4096.json)
@@ -170,8 +160,6 @@ Use the matching wrapper/config loader. These files are tuning choices, not stan
 - [aiter/ops/triton/configs/gfx942/triton/gemm/gemm_a16w16_gated/DEFAULT.json](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/configs/gfx942/triton/gemm/gemm_a16w16_gated/DEFAULT.json)
 - [aiter/ops/triton/configs/gfx942/triton/gemm/gemm_a16w16_persistent/DEFAULT.json](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/configs/gfx942/triton/gemm/gemm_a16w16_persistent/DEFAULT.json)
 - [aiter/ops/triton/configs/gfx942/triton/gemm/grouped/DEFAULT.json](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/configs/gfx942/triton/gemm/grouped/DEFAULT.json)
-- [aiter/ops/triton/configs/gfx950/triton/conv/conv3d_wino_hw_f4x3_gemm/DEFAULT.json](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/configs/gfx950/triton/conv/conv3d_wino_hw_f4x3_gemm/DEFAULT.json)
-- [aiter/ops/triton/configs/gfx950/triton/conv/conv_wino_f4x3_gemm/DEFAULT.json](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/configs/gfx950/triton/conv/conv_wino_f4x3_gemm/DEFAULT.json)
 - [aiter/ops/triton/configs/gfx950/triton/gemm/gemm_a16w16/DEFAULT.json](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/configs/gfx950/triton/gemm/gemm_a16w16/DEFAULT.json)
 - [aiter/ops/triton/configs/gfx950/triton/gemm/gemm_a16w16/GEMM-A16W16-N=10240-K=8192.json](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/configs/gfx950/triton/gemm/gemm_a16w16/GEMM-A16W16-N=10240-K=8192.json)
 - [aiter/ops/triton/configs/gfx950/triton/gemm/gemm_a16w16/GEMM-A16W16-N=128-K=2880.json](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/configs/gfx950/triton/gemm/gemm_a16w16/GEMM-A16W16-N=128-K=2880.json)

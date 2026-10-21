@@ -1,6 +1,8 @@
 # context_parallel_attention
 
-0 current AITER implementation references; 0 historical experience cards.
+Attention split across context-parallel ranks and output merging.
+
+0 AITER implementation references; 0 historical experience cards.
 
 ## Optimization experience
 
@@ -8,7 +10,7 @@
 
 ## GEAK reference material
 
-The material below is imported from GEAK. Its backend status and performance statements belong to the original source dates. Use the AITER pages above for the current source snapshot.
+The material below is imported from GEAK. Its backend status and performance statements belong to the original source dates. Use the pinned AITER references where available to check current applicability.
 
 <details>
 <summary>Original GEAK metadata</summary>
@@ -75,7 +77,7 @@ tuned too ([attention_prefill_fmha](../attention_prefill_fmha/README.md)).
 | sglang_kernels | 🟡 (zigzag ring-attention + split-KV transfer; PD-disagg, maturing on ROCm) | [backends/sglang_kernels.md](backend/sglang_kernels.md) |
 
 ## Fusion neighbors
-LSE-merge of partial outputs ([reduction](../reduction/README.md)), the collective ([all_to_all_dispatch_combine](../all_to_all_dispatch_combine/README.md) / allgather /
+LSE-merge of partial outputs ([reduction](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/reduction/README.md)), the collective ([all_to_all_dispatch_combine](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/all_to_all_dispatch_combine/README.md) / allgather /
 reduce-scatter), KV transfer for PD-disaggregation, fp8 KV. See [fusion.md](fusion.md).
 
 ## Numerics

@@ -60,7 +60,7 @@ quant helpers aren't the bottleneck; check capture-safe metadata under `hipGraph
 
 ## Alternatives / cross-links
 [overview.md](../README.md) · [triton.md](triton.md) · [tilelang.md](tilelang.md) · languages: `hip_cpp` ·
-`triton_amd` · ops: [gather_scatter](../../gather_scatter/README.md) · [paged_kv_copy](../../paged_kv_copy/README.md) · [kv_cache_quant](../../kv_cache_quant/README.md).
+`triton_amd` · ops: [gather_scatter](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/gather_scatter/README.md) · [paged_kv_copy](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/paged_kv_copy/README.md) · [kv_cache_quant](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/kv_cache_quant/README.md).
 
 ## Sources
 - ROCm helper / fnuz quantise-and-insert / capture-safe metadata: https://fergusfinn.com/blog/deepseek-v4-flash-mi300x/

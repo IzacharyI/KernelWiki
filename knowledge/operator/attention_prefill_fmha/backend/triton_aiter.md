@@ -12,11 +12,13 @@ performance_status: not_measured_in_kernelwiki
 
 # Prefill and full attention — AITER triton
 
-Tiled attention interleaves QK products, online softmax and probability-value products. Causal/variable-length masks, dropout or backward outputs distinguish entry points with similar names.
+Tiled attention interleaves QK products, online softmax and probability-value products. Inference paths require the correct causal or variable-length mask, head layout and KV-cache contract. Use forward entry points with dropout disabled.
 
 Follow the public Python wrapper into the launchable Triton function. Tune only parameters that reach that launch; architecture-specific JSON and wrapper-derived split counts can override apparent defaults.
 
 ## Scope and evidence
+
+This page selects LLM inference paths. Shared upstream files and test suites can also contain training code; use their forward cases with gradients and dropout disabled. Explicit gradient-only implementations, tests and configurations are omitted.
 
 The source links below are pinned to AITER `e9995854abbd`. **Recent** means the file changed between 2026-07-21 and this snapshot. The symbol lists and parameter names are extracted from source; they include helpers as well as entry points. They do not certify runtime dispatch, hardware support or a measured speedup.
 
@@ -38,7 +40,7 @@ Parameters referenced in this file: `BLOCK_SIZE`, `num_stages`, `num_warps`, `wa
 
 Source documentation: Compute indexer scores. Args: q: [S, H, Hd] bf16 k: [P, Hd] bf16 w: [S, H] fp32 compress_ratio: int Returns: scores: [S, P] fp32
 
-Symbols: [`_causal_mask`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/dsv4_indexer.py#L11), [`indexer_fwd`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/dsv4_indexer.py#L17), [`indexer_bwd`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/dsv4_indexer.py#L40), [`dsv4_indexer`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/dsv4_indexer.py#L71).
+Symbols: [`_causal_mask`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/dsv4_indexer.py#L11), [`indexer_fwd`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/dsv4_indexer.py#L17), [`dsv4_indexer`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/dsv4_indexer.py#L71).
 
 ### `aiter/ops/triton/attention/extend_attention.py`
 
@@ -76,29 +78,9 @@ Parameters referenced in this file: `BLOCK_DMODEL_QK`, `BLOCK_DMODEL_V`, `BLOCK_
 
 Source documentation: True when the Gluon MHA forward kernel can actually run on this device.
 
-Symbols: [`is_gluon_available`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha.py#L46), [`_resolve_backend`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha.py#L57), [`mha_set_use_fused_bwd_kernel`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha.py#L70), [`mha_set_impl`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha.py#L82), [`mha_set_use_int64_strides`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha.py#L91), [`_fwd_offsets_fit_int32`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha.py#L97), [`mha_set_swizzle`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha.py#L175), [`_get_sliding_window_size`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha.py#L190), [`gluon_forward_unsupported_reason`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha.py#L194), [`check_gluon_forward_support`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha.py#L218), [`_get_softmax_scale`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha.py#L224), [`_pack_attn_returns`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha.py#L228), [`_gluon_flash_attn_forward`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha.py#L237), [`_flash_attn_forward`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha.py#L495), [`_FlashAttnFunc`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha.py#L796), [`flash_attn_func`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha.py#L981), [`_FlashAttnVarlenFunc`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha.py#L1119), [`flash_attn_varlen_func`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha.py#L1325), [`flash_attn_with_kvcache`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha.py#L1485).
+Symbols: [`is_gluon_available`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha.py#L46), [`_resolve_backend`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha.py#L57), [`mha_set_impl`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha.py#L82), [`mha_set_use_int64_strides`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha.py#L91), [`_fwd_offsets_fit_int32`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha.py#L97), [`mha_set_swizzle`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha.py#L175), [`_get_sliding_window_size`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha.py#L190), [`gluon_forward_unsupported_reason`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha.py#L194), [`check_gluon_forward_support`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha.py#L218), [`_get_softmax_scale`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha.py#L224), [`_pack_attn_returns`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha.py#L228), [`_gluon_flash_attn_forward`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha.py#L237), [`_flash_attn_forward`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha.py#L495), [`_FlashAttnFunc`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha.py#L796), [`flash_attn_func`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha.py#L981), [`_FlashAttnVarlenFunc`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha.py#L1119), [`flash_attn_varlen_func`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha.py#L1325), [`flash_attn_with_kvcache`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha.py#L1485).
 
 Parameters referenced in this file: `BLOCK_DMODEL`, `BLOCK_DMODEL_OUT`, `BLOCK_DMODEL_PE`, `BLOCK_DMODEL_PE_POW2`, `BLOCK_DMODEL_POW2`, `BLOCK_M`, `BLOCK_N`, `num_stages`.
-
-### `aiter/ops/triton/attention/mha_fused_bwd.py`
-
-[Source](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha_fused_bwd.py) · **Recent**
-
-Source documentation: Flash Attention fused backward pass computing dQ, dK, dV in a single kernel using atomics. Supports variable-length sequences, GQA, FP8 quantization, and dropout. Args: do (torch.Tensor): Output gradient. Shape (batch, seqlen_q, num_q_heads, head_dim) or (total_tokens, num_q_heads, head_dim) for varlen. q (torch.Tensor): Query tensor from forward pass with same shape as do.
-
-Symbols: [`flash_attn_fused_backward`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha_fused_bwd.py#L20).
-
-Parameters referenced in this file: `BLOCK_D_MODEL`, `BLOCK_D_MODEL_POW2`, `BLOCK_M`, `BLOCK_N`.
-
-### `aiter/ops/triton/attention/mha_onekernel_bwd.py`
-
-[Source](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha_onekernel_bwd.py) · **Recent**
-
-Source documentation: Flash Attention one-kernel backward pass with positional encoding support. Computes dQ, dK, dV in separate passes without atomics. Supports Q/K head dimensions larger than V for positional encoding. Args: do (torch.Tensor): Output gradient. Shape (batch, seqlen_q, num_q_heads, v_head_dim) or (total_tokens, num_q_heads, v_head_dim) for varlen. q (torch.Tensor): Query tensor with shape (batch, seqlen_q, num_q_heads, qk_head_dim).
-
-Symbols: [`flash_attn_onekernel_backward`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/mha_onekernel_bwd.py#L28).
-
-Parameters referenced in this file: `BLOCK_D_MODEL`, `BLOCK_D_MODEL_PE_POW2`, `BLOCK_D_MODEL_POW2`, `BLOCK_M`, `BLOCK_N1`.
 
 ### `aiter/ops/triton/attention/mha_v3.py`
 
@@ -234,22 +216,6 @@ Symbols: [`_cdiv_fn`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19
 
 Parameters referenced in this file: `BLOCK_DMODEL`, `BLOCK_DMODEL_PE`, `BLOCK_DMODEL_POW2`, `BLOCK_M`, `BLOCK_N`, `num_stages`.
 
-### `aiter/ops/triton/_triton_kernels/attention/mha_fused_bwd.py`
-
-[Source](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/attention/mha_fused_bwd.py) · **Recent**
-
-Symbols: [`_bwd_preprocess`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/attention/mha_fused_bwd.py#L33), [`_bwd_dkdvdq_inner`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/attention/mha_fused_bwd.py#L124), [`_bwd_kernel_dkdvdq_causal`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/attention/mha_fused_bwd.py#L355), [`_bwd_kernel_dkdvdq_noncausal`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/attention/mha_fused_bwd.py#L772), [`_get_config`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/attention/mha_fused_bwd.py#L1064).
-
-Parameters referenced in this file: `BLOCK_D_MODEL`, `BLOCK_D_MODEL_POW2`, `BLOCK_M`, `BLOCK_N`.
-
-### `aiter/ops/triton/_triton_kernels/attention/mha_onekernel_bwd.py`
-
-[Source](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/attention/mha_onekernel_bwd.py) · **Recent**
-
-Symbols: [`_bwd_preprocess`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/attention/mha_onekernel_bwd.py#L40), [`_bwd_dkdv_inner`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/attention/mha_onekernel_bwd.py#L132), [`_bwd_dq_inner`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/attention/mha_onekernel_bwd.py#L346), [`bwd_kernel_causal`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/attention/mha_onekernel_bwd.py#L550), [`bwd_kernel_noncausal`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/attention/mha_onekernel_bwd.py#L1270), [`_get_config`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/attention/mha_onekernel_bwd.py#L1771).
-
-Parameters referenced in this file: `BLOCK_D_MODEL`, `BLOCK_D_MODEL_POW2`, `BLOCK_M`, `BLOCK_M1`, `BLOCK_M2`, `BLOCK_N`, `BLOCK_N1`, `BLOCK_N2`.
-
 ### `aiter/ops/triton/_triton_kernels/attention/na3d_flash.py`
 
 [Source](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/attention/na3d_flash.py) · **Recent**
@@ -292,14 +258,6 @@ Parameters referenced in this file: `BLOCK_DMODEL`, `BLOCK_M`, `BLOCK_N`.
 
 Symbols: [`_compute_fp8_scaling_factors`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/common/mha_kernel_utils.py#L9).
 
-### `aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/bwd.py`
-
-[Source](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/bwd.py) · **Recent**
-
-Symbols: [`get_bwd_configs`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/bwd.py#L47), [`_bwd_dq_inner_split`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/bwd.py#L789), [`_bwd_dkdv_inner_split`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/bwd.py#L917), [`_bwd_dkdvdq_inner_atomic`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/bwd.py#L1074), [`_bwd_kernel_fused_atomic_causal`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/bwd.py#L1267), [`_bwd_kernel_split_dkdv_causal`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/bwd.py#L1594), [`_bwd_kernel_split_dq_causal`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/bwd.py#L1896), [`_bwd_kernel_fused_atomic_noncausal`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/bwd.py#L2170), [`_bwd_kernel_split_dkdv_noncausal`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/bwd.py#L2385), [`_bwd_kernel_split_dq_noncausal`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/bwd.py#L2579), [`_bwd_preprocess`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/bwd.py#L2770), [`_bwd_dkdv_inner`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/bwd.py#L2847), [`_bwd_dq_inner`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/bwd.py#L3055), [`_sliding_window_q_bounds`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/bwd.py#L3250), [`_sliding_window_k_bounds`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/bwd.py#L3293), [`bwd_kernel_fused_causal`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/bwd.py#L3335), [`bwd_kernel_fused_noncausal`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/bwd.py#L3969), [`is_contiguous`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/bwd.py#L4390), [`attention_backward_triton_impl`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/bwd.py#L4406).
-
-Parameters referenced in this file: `BLOCK_D_MODEL`, `BLOCK_D_MODEL_POW2`, `BLOCK_M`, `BLOCK_M1`, `BLOCK_M2`, `BLOCK_N`, `BLOCK_N1`, `BLOCK_N2`, `matrix_instr_nonkdim`, `num_stages`, `num_warps`, `waves_per_eu`.
-
 ### `aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/common.py`
 
 [Source](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/common.py) · **Recent**
@@ -324,7 +282,7 @@ Parameters referenced in this file: `BLOCK_DMODEL_QK`, `BLOCK_DMODEL_V`, `BLOCK_
 
 [Source](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/interface_v2.py) · **Recent**
 
-Symbols: [`fwd`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/interface_v2.py#L29), [`bwd`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/interface_v2.py#L220), [`varlen_fwd`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/interface_v2.py#L354), [`varlen_bwd`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/interface_v2.py#L551), [`fwd_kvcache`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/interface_v2.py#L697).
+Symbols: [`fwd`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/interface_v2.py#L29), [`varlen_fwd`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/interface_v2.py#L354), [`fwd_kvcache`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/interface_v2.py#L697).
 
 ### `aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/interface_v3.py`
 
@@ -332,7 +290,7 @@ Symbols: [`fwd`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe
 
 Source documentation: Flash Attention v3 forward pass compatible interface for AMD Triton implementation. This function maps v3 parameters to the existing AMD Triton implementation.
 
-Symbols: [`fwd`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/interface_v3.py#L24), [`bwd`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/interface_v3.py#L412), [`fwd_combine`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/interface_v3.py#L595), [`get_scheduler_metadata`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/interface_v3.py#L620).
+Symbols: [`fwd`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/interface_v3.py#L24), [`fwd_combine`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/interface_v3.py#L595), [`get_scheduler_metadata`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/interface_v3.py#L620).
 
 ### `aiter/ops/triton/_triton_kernels/flash_attn_triton_amd/utils.py`
 
@@ -422,7 +380,6 @@ Related tests for this operator family are listed below. Select the entry point 
 - [op_tests/triton_tests/attention/test_qsa.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/triton_tests/attention/test_qsa.py)
 - [op_tests/triton_tests/fusions/test_attn_res.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/triton_tests/fusions/test_attn_res.py)
 - [op_tests/cpp/mha/compile.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/cpp/mha/compile.py)
-- [op_tests/op_benchmarks/flydsl/bench_mha_bwd.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/op_benchmarks/flydsl/bench_mha_bwd.py)
 - [op_tests/op_benchmarks/flydsl/bench_mha_fwd.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/op_benchmarks/flydsl/bench_mha_fwd.py)
 - [op_tests/test_flydsl_fmha.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/test_flydsl_fmha.py)
 - [op_tests/test_fmha_fwd_mxfp8_asm.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/test_fmha_fwd_mxfp8_asm.py)
@@ -430,7 +387,6 @@ Related tests for this operator family are listed below. Select the entry point 
 - [op_tests/test_fmha_fwd_with_sink_varlen_asm.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/test_fmha_fwd_with_sink_varlen_asm.py)
 - [op_tests/test_mha.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/test_mha.py)
 - [op_tests/test_mha_flydsl.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/test_mha_flydsl.py)
-- [op_tests/test_mha_flydsl_varlen_bwd.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/test_mha_flydsl_varlen_bwd.py)
 - [op_tests/test_mha_fp8.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/test_mha_fp8.py)
 - [op_tests/test_mha_native_splitkv.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/test_mha_native_splitkv.py)
 - [op_tests/test_mha_optional_flydsl.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/test_mha_optional_flydsl.py)
@@ -442,7 +398,7 @@ Related tests for this operator family are listed below. Select the entry point 
 
 ## Performance and validation
 
-Record sequence lengths, masks, heads and dtypes. Use the matching forward or backward reference; do not compare kernel latency with an end-to-end serving metric.
+Record sequence lengths, masks, heads and dtypes. Use the matching forward reference with dropout disabled; do not compare kernel latency with an end-to-end serving metric.
 
 No new GPU timings were collected for this page. Record GPU model, ROCm/compiler/library versions, full shape and strides, input/output dtypes, warmup and timing method, baseline implementation, latency and correctness tolerance before claiming a win. Compare speedups only within the same benchmark protocol and baseline.
 

@@ -91,7 +91,7 @@ are from the vLLM source / ROCm guide.
 | `VLLM_USE_TRITON_FLASH_ATTN` | `0`/`1` (`1`) | Use vLLM's Triton FA. Set `0` for VL models and required-off on RDNA3/Navi. | env_vars (vLLM); vllm issues #4514 |
 | `--aiter-config` | (proposed CLI) | Upcoming single flag to replace the 13 env vars (RFC #33163). | vllm issues #33163 |
 
-Layout-shuffle operator: [`../operators/layout_shuffle/overview.md`](../../operator/layout_shuffle/README.md).
+Layout-shuffle operator: [`../operators/layout_shuffle/overview.md`](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/layout_shuffle/README.md).
 Cross-link: [`../workflows/attention_backend_selection.md`](../workflows/attention_backend_selection.md),
 [`../quantization/deployment_recipes.md`](../quantization/deployment_recipes.md).
 
@@ -159,8 +159,7 @@ Cross-link: [`../languages/`](https://github.com/AMD-AGI/GEAK/blob/02bfbb0b72746
 | `MIOPEN_FIND_ENFORCE` | enum/int | Force (re)search or DB use. | MIOpen docs |
 | `MIOPEN_LOG_LEVEL` | int | MIOpen logging. | MIOpen docs |
 
-(Conv ops on MI are secondary for LLM serving; relevant to [`../operators/conv2d/`](../../operator/conv2d/README.md),
-[`../operators/depthwise_conv/`](../../operator/depthwise_conv/README.md).)
+(Historical library context: [MIOpen convolution](../libraries/miopen/conv.md) is outside the LLM operator collection.))
 
 ## Profiling
 

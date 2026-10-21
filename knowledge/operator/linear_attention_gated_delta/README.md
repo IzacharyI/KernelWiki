@@ -1,10 +1,12 @@
 # linear_attention_gated_delta
 
-5 current AITER implementation references; 6 historical experience cards.
+Recurrent and chunked gated-delta attention, including its causal-conv front end.
+
+5 AITER implementation references; 6 historical experience cards.
 
 ## AITER implementations
 
-Source snapshot: `e9995854abbd`. These pages describe source and validation routes; they do not imply that every implementation has been benchmarked on every GPU.
+Each page pins its source revision. Source references describe implementations and validation routes; they do not establish a measured performance ranking.
 
 | Backend / provider entry | Reference |
 | --- | --- |
@@ -14,13 +16,17 @@ Source snapshot: `e9995854abbd`. These pages describe source and validation rout
 | hip | [Linear attention and gated delta rules — AITER hip](backend/hip_aiter.md) |
 | triton | [Linear attention and gated delta rules — AITER triton](backend/triton_aiter.md) |
 
+### Implementation notes
+
+- [Causal state mixing inside gated-delta attention](backend/aiter_notes.md)
+
 ## Optimization experience
 
 [Learned knowledge](learned_knowledge/README.md) — applicability, outcomes and original evidence.
 
 ## GEAK reference material
 
-The material below is imported from GEAK. Its backend status and performance statements belong to the original source dates. Use the AITER pages above for the current source snapshot.
+The material below is imported from GEAK. Its backend status and performance statements belong to the original source dates. Use the pinned AITER references where available to check current applicability.
 
 <details>
 <summary>Original GEAK metadata</summary>
@@ -94,7 +100,7 @@ kernel is not optional for serving.
 | flydsl | 🧪 experimental (`flydsl_gdr_decode`; import commented out, gfx950-tuned) | [backends/flydsl.md](backend/flydsl.md) |
 
 ## Fusion neighbors
-Causal conv1d ([causal_conv1d](../causal_conv1d/README.md)), L2-norm + RoPE-free QK, sigmoid gating, the chunked cumsum/solve_tril,
+Causal conv1d ([causal_conv1d](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/causal_conv1d/README.md)), L2-norm + RoPE-free QK, sigmoid gating, the chunked cumsum/solve_tril,
 fp8 state quant (rare). See [fusion.md](fusion.md). The full-attn layers it interleaves with are
 [attention_prefill_fmha](../attention_prefill_fmha/README.md) / [gqa_mqa_attention](../gqa_mqa_attention/README.md).
 

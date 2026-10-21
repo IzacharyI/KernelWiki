@@ -1,6 +1,8 @@
 # chunked_prefill
 
-0 current AITER implementation references; 0 historical experience cards.
+Prompt chunks attending to cached prefixes.
+
+0 AITER implementation references; 0 historical experience cards.
 
 ## Optimization experience
 
@@ -8,7 +10,7 @@
 
 ## GEAK reference material
 
-The material below is imported from GEAK. Its backend status and performance statements belong to the original source dates. Use the AITER pages above for the current source snapshot.
+The material below is imported from GEAK. Its backend status and performance statements belong to the original source dates. Use the pinned AITER references where available to check current applicability.
 
 <details>
 <summary>Original GEAK metadata</summary>

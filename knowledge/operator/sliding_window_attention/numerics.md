@@ -34,7 +34,7 @@ SWA uses the same fp32 online-softmax accumulate as full FMHA, so per-element pr
 
 ## FP8 KV cache
 fp8 SWA decode (fnuz on gfx942) quantizes the KV cache; the off-by-one exponent bias vs OCP means a
-wrong-dialect read is off by ~2×. Always accuracy-gate fp8 SWA. See [kv_cache_quant](../kv_cache_quant/README.md).
+wrong-dialect read is off by ~2×. Always accuracy-gate fp8 SWA. See [kv_cache_quant](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/kv_cache_quant/README.md).
 
 ## Parity gate
 - Oracle: dense attention with an explicit Python band mask (`+ sink` if applicable), fp32, same RoPE.

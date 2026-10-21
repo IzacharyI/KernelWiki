@@ -1,6 +1,6 @@
 # General kernel knowledge
 
-Methods and reference material shared across operators. Start with the operator page when optimizing a specific kernel.
+Methods and reference material shared across operators. Start with the [GEMM, MoE, attention and indexer collection](../operator/README.md) when optimizing an LLM inference workload. Imported library and taxonomy documents can describe a broader historical ecosystem; they do not define the active operator scope.
 
 - [backend](backend/README.md)
 - [case_studies](case_studies/README.md)

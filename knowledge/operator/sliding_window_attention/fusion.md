@@ -19,11 +19,11 @@ ones:
 
 | fusion | where | benefit |
 |---|---|---|
-| **RoPE / qk-norm pre-step** | before QKᵀ | one less HBM round-trip; standard FA fusion ([rope](../rope/README.md), [rmsnorm](../rmsnorm/README.md)) |
+| **RoPE / qk-norm pre-step** | before QKᵀ | one less HBM round-trip; standard FA fusion ([rope](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/rope/README.md), [rmsnorm](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/rmsnorm/README.md)) |
 | **Band mask + block-skip** | the KV loop bound itself | the SWA win — see [tuning.md](tuning.md) |
 | **Logit soft-cap** | fp32, before mask add | Gemma-2/3 (`tanh` cap); fused into the score |
 | **Attention sink** | mask coordinate builder | StreamingLLM / GPT-OSS keep first-N + last-W |
-| **fp8 KV-cache quant/dequant** | KV load | bandwidth; fnuz on gfx942 ([kv_cache_quant](../kv_cache_quant/README.md)) |
+| **fp8 KV-cache quant/dequant** | KV load | bandwidth; fnuz on gfx942 ([kv_cache_quant](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/kv_cache_quant/README.md)) |
 | **Output projection** | epilogue (rarely) | usually a separate GEMM; kept distinct on AMD |
 
 ## Hybrid-model layer routing (the macro-fusion)
@@ -35,7 +35,7 @@ vLLM's `ROCM_AITER_FA` routes Decode/Prefill/Extend per request; SWA layers ride
 ## Cross-links
 - Core attention fusion: [attention_prefill_fmha](../attention_prefill_fmha/README.md) · [attention_decode_paged](../attention_decode_paged/README.md)
 - Chunked/prefix-cache interplay: [chunked_prefill](../chunked_prefill/README.md)
-- KV quant: [kv_cache_quant](../kv_cache_quant/README.md) · RoPE: [rope](../rope/README.md)
+- KV quant: [kv_cache_quant](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/kv_cache_quant/README.md) · RoPE: [rope](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/rope/README.md)
 
 ## Sources
 - FA SWA + soft-cap + sink: https://github.com/Dao-AILab/flash-attention

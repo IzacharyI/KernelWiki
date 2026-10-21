@@ -77,7 +77,7 @@ estimated LDS (`preshuffle_gemm_estimated_lds_bytes` vs `max_lds_bytes_for_tune(
 
 ## Numerics / parity
 fp32 accumulate. Scales are applied via the MXFP block-scaled MFMA on gfx950 (block size 32 — the scale
-layout is `(c_mn1, c_k1, 4, 16)` with `scale_block_size=32`, see [operators/layout_shuffle/backends/flydsl](../../layout_shuffle/backend/flydsl.md)).
+layout is `(c_mn1, c_k1, 4, 16)` with `scale_block_size=32`, see [operators/layout_shuffle/backends/flydsl](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/layout_shuffle/backend/flydsl.md)).
 `tile_k_bytes` must be divisible by 64; fp4 requires `tile_k=128` (or `k_unroll≥1` for
 `mfma_scale_f32_16x16x128`). a4w4 MoE test tolerances: `atol=1.0, rtol=0.05, pass≥95%` per stage, `≥90%`
 e2e (`test_flydsl_moe_a4w4.py`, `QuantType.per_1x32`, `fp4x2`).
@@ -104,7 +104,7 @@ pytest -q aiter/ops/flydsl/test_flydsl_moe_a4w4.py                              
 
 ## Alternatives / cross-links
 [operators/scaled_quant_gemm/backends/aiter](aiter.md) (sota dispatch) · [operators/scaled_quant_gemm/backends/triton](triton.md) ·
-[operators/layout_shuffle/backends/flydsl](../../layout_shuffle/backend/flydsl.md) (preshuffle B + scale layouts) ·
+[operators/layout_shuffle/backends/flydsl](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/layout_shuffle/backend/flydsl.md) (preshuffle B + scale layouts) ·
 [operators/gemm_epilogue_fused/backends/flydsl](../../gemm_epilogue_fused/backend/flydsl.md) (C-shuffle epilogue) ·
 [operators/grouped_gemm_moe/backends/aiter](../../grouped_gemm_moe/backend/aiter.md) (FlyDSL MoE GEMM).
 

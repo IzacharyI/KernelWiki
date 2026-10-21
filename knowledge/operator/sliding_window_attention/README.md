@@ -1,6 +1,8 @@
 # sliding_window_attention
 
-0 current AITER implementation references; 0 historical experience cards.
+Window-limited attention and local/global layer combinations.
+
+0 AITER implementation references; 0 historical experience cards.
 
 ## Optimization experience
 
@@ -8,7 +10,7 @@
 
 ## GEAK reference material
 
-The material below is imported from GEAK. Its backend status and performance statements belong to the original source dates. Use the AITER pages above for the current source snapshot.
+The material below is imported from GEAK. Its backend status and performance statements belong to the original source dates. Use the pinned AITER references where available to check current applicability.
 
 <details>
 <summary>Original GEAK metadata</summary>
@@ -77,7 +79,7 @@ long-context regime where MI300X's 192 GB HBM is the selling point. Note the kno
 
 ## Fusion neighbors
 RoPE pre-step, qk-norm, logit soft-cap, attention-sink tokens, fp8 KV-cache quant
-([kv_cache_quant](../kv_cache_quant/README.md)). See [fusion.md](fusion.md).
+([kv_cache_quant](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/kv_cache_quant/README.md)). See [fusion.md](fusion.md).
 
 ## Numerics
 Band mask + online softmax; same fp32-accumulate parity rules as full FMHA. The risk is **correctness,

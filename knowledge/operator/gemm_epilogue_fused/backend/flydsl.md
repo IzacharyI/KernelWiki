@@ -105,7 +105,7 @@ pytest -q aiter/ops/flydsl/test_flydsl_moe_a4w4.py   # exercises preshuffle GEMM
 [operators/gemm_epilogue_fused/backends/ck](ck.md) (CShuffle CDEElementwise, richest fusion) ·
 [operators/gemm_epilogue_fused/backends/aiter](aiter.md) (live bias/scale epilogue) ·
 [operators/scaled_quant_gemm/backends/flydsl](../../scaled_quant_gemm/backend/flydsl.md) (the kernels that use this epilogue) ·
-[operators/layout_shuffle/backends/flydsl](../../layout_shuffle/backend/flydsl.md) (B/scale preshuffle staging).
+[operators/layout_shuffle/backends/flydsl](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/layout_shuffle/backend/flydsl.md) (B/scale preshuffle staging).
 
 ## Sources
 - On-box: `/sgl-workspace/aiter/aiter/ops/flydsl/kernels/mfma_epilogues.py` (`mfma_epilog`, `default_epilog`,

@@ -48,7 +48,7 @@ See [languages/hipkittens](../../../general/backend/hipkittens/overview.md) (pri
 - **Tile size** (primitive parameter); **MFMA shape** `16×16×32` default for deep pipelines.
 - **Pinned register tiles** to bypass the HIPCC AGPR penalty on matmul-heavy loops.
 - **Scaling**: FP8 input scales (per-tensor / block); CDNA4 native scaled-MFMA available for FP4/FP6
-  variants (see [operators/quant_fp4_mxfp](../../quant_fp4_mxfp/README.md)).
+  variants (see [operators/quant_fp4_mxfp](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_fp4_mxfp/README.md)).
 
 ## Numerics / parity
 - FP8 (e4m3/e5m2) inputs with scales, **FP32 accumulate** → parity within FP8 quant error vs a BF16/FP32
@@ -80,7 +80,7 @@ hipcc --offload-arch=gfx950 ...   # pinned HK commit, FP8 GEMM micro-bench
 [operators/scaled_quant_gemm/backends/hipblaslt](hipblaslt.md) (bar ~3130 @ 8192) ·
 [operators/scaled_quant_gemm/backends/aiter](aiter.md) (block-scale + e2e gate) ·
 [operators/scaled_quant_gemm/backends/flydsl](flydsl.md) · [operators/dense_gemm/backends/hipkittens](../../dense_gemm/backend/hipkittens.md) (BF16) ·
-[operators/quant_fp4_mxfp](../../quant_fp4_mxfp/README.md) · [languages/hipkittens](../../../general/backend/hipkittens/overview.md) · [optimization/mfma_scheduling](../../../general/optimization/mfma_scheduling.md).
+[operators/quant_fp4_mxfp](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_fp4_mxfp/README.md) · [languages/hipkittens](../../../general/backend/hipkittens/overview.md) · [optimization/mfma_scheduling](../../../general/optimization/mfma_scheduling.md).
 
 ## Sources
 - HipKittens — arXiv 2511.08083 (Hazy Research, Nov 2025): https://arxiv.org/abs/2511.08083 ; HTML (Table 3) https://arxiv.org/html/2511.08083v1

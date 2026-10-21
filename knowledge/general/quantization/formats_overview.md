@@ -18,7 +18,7 @@ sources:
 > **TL;DR.** Inference on MI GPUs walks a precision ladder: **bf16/fp16** (baseline, lossless swap) →
 > **FP8 E4M3** (2× compute, the inference default) → **MXFP4/MXFP6** (4×, block-scaled, CDNA4-only HW) →
 > **INT8/INT4** (weight-only, integer). This page is the bit-layout reference; the *behavioral* numerics
-> live in [operators/quant_dequant_fp8](../../operator/quant_dequant_fp8/README.md) and [operators/quant_fp4_mxfp](../../operator/quant_fp4_mxfp/README.md) — read those for rounding,
+> live in [operators/quant_dequant_fp8](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_dequant_fp8/README.md) and [operators/quant_fp4_mxfp](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_fp4_mxfp/README.md) — read those for rounding,
 > amax, clamps. Dialect (FNUZ vs OCP) is in [fnuz_vs_ocp.md](fnuz_vs_ocp.md); block scaling in [block_scaling_mxfp.md](block_scaling_mxfp.md).
 
 ## The ladder at a glance
@@ -47,7 +47,7 @@ Element max values per the OCP MX spec / HIP FP8 reference; FP6/FP4 maxima are t
 - **FP6 E2M3** `S EE MMM`, **FP6 E3M2** `S EEE MM` — OCP MX 6-bit element formats; no inf/NaN encodings.
 - **FP4 E2M1** `S EE M` — only **15 distinct levels** `{0, ±0.5, ±1, ±1.5, ±2, ±3, ±4, ±6}`. Useless
   alone; the per-block E8M0 scale is what makes it usable ([block_scaling_mxfp.md](block_scaling_mxfp.md),
-  [operators/quant_fp4_mxfp](../../operator/quant_fp4_mxfp/README.md)).
+  [operators/quant_fp4_mxfp](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_fp4_mxfp/README.md)).
 
 ## Integer formats
 - **INT8** — symmetric `[-127,127]` (or asymmetric with zero-point). Pairs with FP scale `x ≈ s·q`.
@@ -84,8 +84,8 @@ per-value precision; the shared scale restores dynamic range cheaply.
   LLM default.
 
 ## Verify
-- Round-trip a tensor through the chosen cast; check max-rel-error per [operators/quant_dequant_fp8](../../operator/quant_dequant_fp8/README.md) /
-  [operators/quant_fp4_mxfp](../../operator/quant_fp4_mxfp/README.md). Confirm the saturation point matches the dtype+dialect.
+- Round-trip a tensor through the chosen cast; check max-rel-error per [operators/quant_dequant_fp8](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_dequant_fp8/README.md) /
+  [operators/quant_fp4_mxfp](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_fp4_mxfp/README.md). Confirm the saturation point matches the dtype+dialect.
 
 ## Sources
 - OCP MX formats (element types, E8M0, group 32, MXFP4/6/8): https://www.opencompute.org/documents/ocp-microscaling-formats-mx-v1-0-spec-final-pdf

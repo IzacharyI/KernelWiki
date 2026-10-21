@@ -1,6 +1,6 @@
 # KernelWiki
 
-An **operator-centered GPU kernel knowledge base** that documents backend implementations, applicability, performance evidence and optimization experience to help developers and GEAK write, select and improve kernels.
+An **operator-centered GPU kernel knowledge base for LLM inference**, focused on **GEMM, MoE, attention and attention indexers**, including their variants and fusions. It documents backend implementations, applicability, performance evidence and optimization experience to help developers and GEAK write, select and improve kernels.
 
 ## Content
 
@@ -37,17 +37,18 @@ kernelwiki/
 ## Getting started
 
 - [Dense GEMM](knowledge/operator/dense_gemm/README.md) · [Quantized GEMM](knowledge/operator/scaled_quant_gemm/README.md) · [Grouped GEMM / MoE](knowledge/operator/grouped_gemm_moe/README.md)
-- [MLA](knowledge/operator/mla_attention/README.md) · [Paged decode attention](knowledge/operator/attention_decode_paged/README.md) · [RMSNorm](knowledge/operator/rmsnorm/README.md)
+- [MLA](knowledge/operator/mla_attention/README.md) · [Paged decode attention](knowledge/operator/attention_decode_paged/README.md) · [Attention indexer](knowledge/operator/attention_indexer/README.md)
+- [GEMM fusions](knowledge/operator/gemm_epilogue_fused/README.md) · [Fused MoE](knowledge/operator/fused_moe_grouped_gemm/README.md) · [Q/K preparation fusions](knowledge/operator/qk_norm_rope_cache/README.md)
 - [Bottleneck analysis](knowledge/general/profile_bottleneck/README.md) · [Optimization methods](knowledge/general/optimization/README.md) · [Writing knowledge and recording evidence](knowledge/README.md)
 
-## Initial content
+## Operator scope and evidence
 
-- GEAK source: [`02bfbb0b7274`](https://github.com/AMD-AGI/GEAK/tree/02bfbb0b72746941be3ab3ad48fb21a284ae2fde). Imports 894 Markdown documents, including 166 kernel and end-to-end experience cards, together with their supporting recipe resources.
-- AITER source: [`e9995854abbd`](https://github.com/ROCm/aiter/tree/e9995854abbd935f0190b19abebe9938b6b90cca). Adds 159 operator/backend implementation references covering 919 implementation and support source files, of which 824 changed in the preceding three months. Another 3,271 ASM/HSA artifacts and metadata files are referenced by family.
-- There are 63 operator directories. Source-reference coverage and measured-performance coverage are separate: this import adds no GPU benchmark results and does not certify historical SOTA labels as current winners.
-- Previously processed GEAK inbox files, old generated indexes and index-generation scripts are excluded from the curated knowledge. Their originals remain available in the pinned GEAK revision.
+- **23 operator directories**, grouped by GEMM, MoE, attention and indexer workloads, with **84 AITER backend/provider reference pages**, **8 implementation-note pages** and **122 operator experience cards**.
+- Standalone small operators, spatial convolutions, training losses, recommendation attention and general solvers are excluded from the operator collection. Quantization, activation, cache layout, normalization and communication are documented where they affect a main kernel or fusion. MoE routing/dispatch and Q/K preparation fusions remain part of those workloads.
+- AITER references primarily use [`e9995854abbd`](https://github.com/ROCm/aiter/tree/e9995854abbd935f0190b19abebe9938b6b90cca), with a recent-source window of 2026-07-21 through 2026-10-21. The [FP4 GEMM note](knowledge/operator/scaled_quant_gemm/backend/asm_notes.md) uses [`b3ad6c461703`](https://github.com/ROCm/aiter/tree/b3ad6c461703110dc36286265c16e453ef0e2dd2). Explicit gradient-only implementations and tests are excluded from current operator reference pages.
+- Historical explanations and experience cards come from GEAK [`02bfbb0b7274`](https://github.com/AMD-AGI/GEAK/tree/02bfbb0b72746941be3ab3ad48fb21a284ae2fde). General methods remain under `knowledge/general/`; citations to excluded operators can point to pinned archived documents.
 
-AITER is the main source of implementation knowledge. Documents include pinned links to source, configuration and tests, with the focus on the kernels themselves. Choosing the best implementation requires a specific GPU, dtype, shape/layout and comparable measurements.
+AITER is the main source of implementation knowledge. This is a curated workload collection, not a claim to cover every AITER kernel. Documents include pinned links to source, configuration and tests. Choosing the best implementation requires a specific GPU, dtype, shape/layout and comparable measurements. Source coverage adds no GPU benchmark results and does not certify historical SOTA labels as current winners.
 
 ## Kernel source collection
 

@@ -9,7 +9,7 @@ KernelWiki reorganized documents, adjusted links and Python package imports, add
 
 ## AITER
 
-Current source references, selected documentation excerpts and the kernel body/naming helper in `kernels/rmsnorm/triton/aiter_row_tiled/` use ROCm/aiter, commit `e9995854abbd935f0190b19abebe9938b6b90cca`. The source bundle preserves its MIT license and documents the standalone wrapper and packaging adaptations. KernelWiki does not distribute AITER code objects or a full working copy of AITER. The original license for AITER material follows.
+Source references, selected documentation excerpts and the kernel body/naming helper in `kernels/rmsnorm/triton/aiter_row_tiled/` use ROCm/aiter, commit `e9995854abbd935f0190b19abebe9938b6b90cca`. The FP4 GEMM implementation note additionally references commit `b3ad6c461703110dc36286265c16e453ef0e2dd2`. Each page identifies its source revision. The source bundle preserves its MIT license and documents the standalone wrapper and packaging adaptations. KernelWiki does not distribute AITER code objects or a full working copy of AITER. The original license for AITER material follows.
 
 ```text
 Copyright © Advanced Micro Devices, Inc. All rights reserved.

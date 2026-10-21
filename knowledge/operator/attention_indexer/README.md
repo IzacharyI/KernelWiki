@@ -1,10 +1,12 @@
 # attention_indexer
 
-6 current AITER implementation references; 0 historical experience cards.
+MQA logits, index scores, block selection and top-k for sparse attention.
+
+6 AITER implementation references; 0 historical experience cards.
 
 ## AITER implementations
 
-Source snapshot: `e9995854abbd`. These pages describe source and validation routes; they do not imply that every implementation has been benchmarked on every GPU.
+Each page pins its source revision. Source references describe implementations and validation routes; they do not establish a measured performance ranking.
 
 | Backend / provider entry | Reference |
 | --- | --- |
@@ -14,6 +16,10 @@ Source snapshot: `e9995854abbd`. These pages describe source and validation rout
 | hip | [Attention index scoring and selection — AITER hip](backend/hip_aiter.md) |
 | opus | [Attention index scoring and selection — AITER opus](backend/opus_aiter.md) |
 | triton | [Attention index scoring and selection — AITER triton](backend/triton_aiter.md) |
+
+### Implementation notes
+
+- [Scoring and selection in the attention indexer](backend/flydsl_notes.md)
 
 ## Optimization experience
 

@@ -1,10 +1,12 @@
 # sparse_attention_nsa
 
-5 current AITER implementation references; 2 historical experience cards.
+Selected-block and sparse MLA/NSA attention execution.
+
+5 AITER implementation references; 2 historical experience cards.
 
 ## AITER implementations
 
-Source snapshot: `e9995854abbd`. These pages describe source and validation routes; they do not imply that every implementation has been benchmarked on every GPU.
+Each page pins its source revision. Source references describe implementations and validation routes; they do not establish a measured performance ranking.
 
 | Backend / provider entry | Reference |
 | --- | --- |
@@ -20,7 +22,7 @@ Source snapshot: `e9995854abbd`. These pages describe source and validation rout
 
 ## GEAK reference material
 
-The material below is imported from GEAK. Its backend status and performance statements belong to the original source dates. Use the AITER pages above for the current source snapshot.
+The material below is imported from GEAK. Its backend status and performance statements belong to the original source dates. Use the pinned AITER references where available to check current applicability.
 
 <details>
 <summary>Original GEAK metadata</summary>
@@ -92,8 +94,8 @@ capture-safe metadata), not the matmul itself — confirming the selection/gathe
 | aiter | 🟢 (dispatcher; `unified_attention_sparse_mla`, `pa_mqa_logits`) | see triton card + `aiter` |
 
 ## Fusion neighbors
-Compressed-KV pooling, the **indexer** (fp8 MQA logits), top-k block selection ([argmax_topk](../argmax_topk/README.md)),
-paged-KV gather ([gather_scatter](../gather_scatter/README.md) / [paged_kv_copy](../paged_kv_copy/README.md)), RoPE, fp8 KV quant. The sliding-window branch
+Compressed-KV pooling, the **indexer** (fp8 MQA logits), top-k block selection ([argmax_topk](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/argmax_topk/README.md)),
+paged-KV gather ([gather_scatter](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/gather_scatter/README.md) / [paged_kv_copy](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/paged_kv_copy/README.md)), RoPE, fp8 KV quant. The sliding-window branch
 is [sliding_window_attention](../sliding_window_attention/README.md). See [fusion.md](fusion.md).
 
 ## Numerics

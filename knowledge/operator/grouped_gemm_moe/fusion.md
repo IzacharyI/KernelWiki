@@ -19,9 +19,9 @@ sources:
 
 ## Fusion neighbors
 - **act-and-mul (silu/gelu) between the two grouped GEMMs**: fuse as an epilogue of gate/up to avoid a
-  round trip → [../act_and_mul_silu_gelu/overview.md](../act_and_mul_silu_gelu/README.md).
+  round trip → [../act_and_mul_silu_gelu/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/act_and_mul_silu_gelu/README.md).
 - **Per-token/per-block quant epilogue**: quantize gate/up output to fp8/fp4 before the down GEMM, fused
-  with the activation → [../fused_norm_quant/overview.md](../fused_norm_quant/README.md),
+  with the activation → [../fused_norm_quant/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/fused_norm_quant/README.md),
   [../scaled_quant_gemm/fusion.md](../scaled_quant_gemm/fusion.md).
 - **Routing + align&sort upstream**: [../moe_routing_topk/overview.md](../moe_routing_topk/README.md),
   [../moe_dispatch_combine/overview.md](../moe_dispatch_combine/README.md).
@@ -30,7 +30,7 @@ sources:
 - **Shared expert**: fuse the always-on shared expert with the routed experts →
   [../shared_expert_fusion/overview.md](../shared_expert_fusion/README.md).
 - **EP communication**: with expert parallelism, dispatch/combine all-to-all overlaps with the grouped
-  GEMM → [../all_to_all_dispatch_combine/overview.md](../all_to_all_dispatch_combine/README.md).
+  GEMM → [../all_to_all_dispatch_combine/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/all_to_all_dispatch_combine/README.md).
 
 ## What AITER fuses
 - AITER asm fused_moe is reported best-on-AMD by fusing the grouped GEMMs + activation + combine; FlyDSL

@@ -80,7 +80,7 @@ TRITON_ENABLE_LLIR_SCHED=1 TRITON_ENABLE_AMDGCN_AS=1 \
 [operators/dense_gemm/backends/hipblaslt](hipblaslt.md) (no-tune default) ·
 [operators/dense_gemm/backends/aiter](aiter.md) (dispatch + e2e gate) ·
 [operators/scaled_quant_gemm/backends/gluon](../../scaled_quant_gemm/backend/gluon.md) (BF8) ·
-[operators/quant_fp4_mxfp/backends/gluon](../../quant_fp4_mxfp/backend/gluon.md) (MXFP4) ·
+[operators/quant_fp4_mxfp/backends/gluon](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_fp4_mxfp/backend/gluon.md) (MXFP4) ·
 [languages/gluon](../../../general/backend/gluon/overview.md) · [languages/triton_amd](../../../general/backend/triton_amd/overview.md) · [optimization/mfma_scheduling](../../../general/optimization/mfma_scheduling.md)
 
 ## Sources

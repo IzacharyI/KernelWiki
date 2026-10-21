@@ -12,11 +12,13 @@ performance_status: not_measured_in_kernelwiki
 
 # Prefill and full attention — AITER asm
 
-Tiled attention interleaves QK products, online softmax and probability-value products. Causal/variable-length masks, dropout or backward outputs distinguish entry points with similar names.
+Tiled attention interleaves QK products, online softmax and probability-value products. Inference paths require the correct causal or variable-length mask, head layout and KV-cache contract. Use forward entry points with dropout disabled.
 
 AITER ships architecture-specific code objects and dispatch metadata. Binary family names identify candidates, but do not prove supported shapes or performance; follow the wrapper and metadata that select an object.
 
 ## Scope and evidence
+
+This page selects LLM inference paths. Shared upstream files and test suites can also contain training code; use their forward cases with gradients and dropout disabled. Explicit gradient-only implementations, tests and configurations are omitted.
 
 The source links below are pinned to AITER `e9995854abbd`. **Recent** means the file changed between 2026-07-21 and this snapshot. The symbol lists and parameter names are extracted from source; they include helpers as well as entry points. They do not certify runtime dispatch, hardware support or a measured speedup.
 
@@ -31,14 +33,11 @@ These are shipped code objects and their metadata, grouped by family rather than
 | [hsa/gfx1250/fmha_fwd_bf16](https://github.com/ROCm/aiter/tree/e9995854abbd935f0190b19abebe9938b6b90cca/hsa/gfx1250/fmha_fwd_bf16) | 5 | 4 |
 | [hsa/gfx1250/fmha_fwd_bf16_varlen](https://github.com/ROCm/aiter/tree/e9995854abbd935f0190b19abebe9938b6b90cca/hsa/gfx1250/fmha_fwd_bf16_varlen) | 7 | 7 |
 | [hsa/gfx1250/fmha_fwd_mxfp8](https://github.com/ROCm/aiter/tree/e9995854abbd935f0190b19abebe9938b6b90cca/hsa/gfx1250/fmha_fwd_mxfp8) | 3 | 0 |
-| [hsa/gfx1250/fmha_v3_bwd](https://github.com/ROCm/aiter/tree/e9995854abbd935f0190b19abebe9938b6b90cca/hsa/gfx1250/fmha_v3_bwd) | 25 | 25 |
-| [hsa/gfx942/fmha_v3_bwd](https://github.com/ROCm/aiter/tree/e9995854abbd935f0190b19abebe9938b6b90cca/hsa/gfx942/fmha_v3_bwd) | 160 | 0 |
 | [hsa/gfx942/fmha_v3_fwd](https://github.com/ROCm/aiter/tree/e9995854abbd935f0190b19abebe9938b6b90cca/hsa/gfx942/fmha_v3_fwd) | 1 | 0 |
 | [hsa/gfx942/fmha_v3_fwd/MI300](https://github.com/ROCm/aiter/tree/e9995854abbd935f0190b19abebe9938b6b90cca/hsa/gfx942/fmha_v3_fwd/MI300) | 28 | 0 |
 | [hsa/gfx942/fmha_v3_fwd/MI308](https://github.com/ROCm/aiter/tree/e9995854abbd935f0190b19abebe9938b6b90cca/hsa/gfx942/fmha_v3_fwd/MI308) | 28 | 0 |
 | [hsa/gfx942/fmha_v4_fwd](https://github.com/ROCm/aiter/tree/e9995854abbd935f0190b19abebe9938b6b90cca/hsa/gfx942/fmha_v4_fwd) | 1 | 1 |
 | [hsa/gfx942/fmha_v4_fwd/MI300](https://github.com/ROCm/aiter/tree/e9995854abbd935f0190b19abebe9938b6b90cca/hsa/gfx942/fmha_v4_fwd/MI300) | 4 | 4 |
-| [hsa/gfx950/fmha_v3_bwd](https://github.com/ROCm/aiter/tree/e9995854abbd935f0190b19abebe9938b6b90cca/hsa/gfx950/fmha_v3_bwd) | 130 | 4 |
 | [hsa/gfx950/fmha_v3_fwd](https://github.com/ROCm/aiter/tree/e9995854abbd935f0190b19abebe9938b6b90cca/hsa/gfx950/fmha_v3_fwd) | 21 | 13 |
 | [hsa/gfx950/fmha_v4_fwd](https://github.com/ROCm/aiter/tree/e9995854abbd935f0190b19abebe9938b6b90cca/hsa/gfx950/fmha_v4_fwd) | 23 | 23 |
 | [hsa/gfx950/reduce](https://github.com/ROCm/aiter/tree/e9995854abbd935f0190b19abebe9938b6b90cca/hsa/gfx950/reduce) | 1 | 1 |
@@ -48,7 +47,6 @@ These are shipped code objects and their metadata, grouped by family rather than
 Related tests for this operator family are listed below. Select the entry point and backend that match the implementation; the presence of a test does not mean KernelWiki ran it or that every backend is covered.
 
 - [op_tests/cpp/mha/compile.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/cpp/mha/compile.py)
-- [op_tests/op_benchmarks/flydsl/bench_mha_bwd.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/op_benchmarks/flydsl/bench_mha_bwd.py)
 - [op_tests/op_benchmarks/flydsl/bench_mha_fwd.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/op_benchmarks/flydsl/bench_mha_fwd.py)
 - [op_tests/op_benchmarks/triton/bench_attn_res.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/op_benchmarks/triton/bench_attn_res.py)
 - [op_tests/op_benchmarks/triton/bench_deepgemm_attention.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/op_benchmarks/triton/bench_deepgemm_attention.py)
@@ -62,7 +60,6 @@ Related tests for this operator family are listed below. Select the entry point 
 - [op_tests/test_fmha_fwd_with_sink_varlen_asm.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/test_fmha_fwd_with_sink_varlen_asm.py)
 - [op_tests/test_mha.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/test_mha.py)
 - [op_tests/test_mha_flydsl.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/test_mha_flydsl.py)
-- [op_tests/test_mha_flydsl_varlen_bwd.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/test_mha_flydsl_varlen_bwd.py)
 - [op_tests/test_mha_fp8.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/test_mha_fp8.py)
 - [op_tests/test_mha_native_splitkv.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/test_mha_native_splitkv.py)
 - [op_tests/test_mha_optional_flydsl.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/test_mha_optional_flydsl.py)
@@ -94,7 +91,7 @@ Related tests for this operator family are listed below. Select the entry point 
 
 ## Performance and validation
 
-Record sequence lengths, masks, heads and dtypes. Use the matching forward or backward reference; do not compare kernel latency with an end-to-end serving metric.
+Record sequence lengths, masks, heads and dtypes. Use the matching forward reference with dropout disabled; do not compare kernel latency with an end-to-end serving metric.
 
 No new GPU timings were collected for this page. Record GPU model, ROCm/compiler/library versions, full shape and strides, input/output dtypes, warmup and timing method, baseline implementation, latency and correctness tolerance before claiming a win. Compare speedups only within the same benchmark protocol and baseline.
 

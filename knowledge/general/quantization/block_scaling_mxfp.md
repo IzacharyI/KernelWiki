@@ -19,7 +19,7 @@ sources:
 > **E8M0** (8-bit, exponent-only) scale, chosen so the block's largest element lands at the top
 > representable power-of-2. That per-block self-normalization is what makes 4-bit usable. CDNA4 runs it
 > *in the matrix core* (block-scaled MFMA); CDNA3 only simulates. The bit-exact per-block algorithm
-> (amax, `f32_to_e8m0`, shuffle) is in [operators/quant_fp4_mxfp](../../operator/quant_fp4_mxfp/README.md) — this page is the *why/strategy*
+> (amax, `f32_to_e8m0`, shuffle) is in [operators/quant_fp4_mxfp](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_fp4_mxfp/README.md) — this page is the *why/strategy*
 > above it. HW: [hardware/cdna4_mi350](https://github.com/AMD-AGI/GEAK/blob/02bfbb0b72746941be3ab3ad48fb21a284ae2fde/perf_knowledge/hardware/cdna4_mi350).
 
 ## Why a shared block scale
@@ -27,7 +27,7 @@ FP4 E2M1 has **15 levels** (max ±6) — hopeless for real activations/weights w
 single per-tensor scale wastes range on outliers. MX fixes this by giving **every 32 consecutive
 elements** their own scale: each block self-normalizes, so quiet blocks keep precision while loud blocks
 don't clip. This is the 4-bit analog of per-token/per-block FP8 ([scaling_strategies.md](scaling_strategies.md),
-[operators/quant_dequant_fp8](../../operator/quant_dequant_fp8/README.md)).
+[operators/quant_dequant_fp8](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_dequant_fp8/README.md)).
 
 ## The E8M0 block scale
 - **8 bits, exponent only, no sign, no mantissa.** Value = `2^(E−127)` — literally an FP32 biased
@@ -49,7 +49,7 @@ Two different things get called "block scale":
   CK→FlyDSL recipe is the gated expert skill `flydsl_fp8_blockscale_gemm`.
 
 ## Scale selection: power-of-2 amax (strategy)
-Per block (detail in [operators/quant_fp4_mxfp](../../operator/quant_fp4_mxfp/README.md), aiter `per_1x32_f4_quant`):
+Per block (detail in [operators/quant_fp4_mxfp](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_fp4_mxfp/README.md), aiter `per_1x32_f4_quant`):
 1. `block_amax = max(|x|)` over the 32 elements.
 2. Use the **power-of-2** element max, e.g. `FP4_MAX = 2^floor(log2(6)) = 4.0` — not 6 — because E8M0
    scales are powers of two and the largest element must land on the top representable power.
@@ -63,7 +63,7 @@ The block-scaled MFMA (`v_mfma_scale_f32_32x32x64_f8f6f4`, builtin
 Bx 2×32 for the 32×32×64 shape). aiter `shuffle=True` (`e8m0_shuffle`) rearranges + pads the scale
 tensor (`((m+255)//256*256, ((n+31)//32+7)//8*8)`) to match. **Wrong shuffle = silent corruption.**
 Verify with `amd_matrix_instruction_calculator --get-register --Ax/--Bx`. Full detail:
-[operators/quant_fp4_mxfp](../../operator/quant_fp4_mxfp/README.md), [hardware/cdna4_mi350](https://github.com/AMD-AGI/GEAK/blob/02bfbb0b72746941be3ab3ad48fb21a284ae2fde/perf_knowledge/hardware/cdna4_mi350), [operators/scaled_quant_gemm](../../operator/scaled_quant_gemm/README.md).
+[operators/quant_fp4_mxfp](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_fp4_mxfp/README.md), [hardware/cdna4_mi350](https://github.com/AMD-AGI/GEAK/blob/02bfbb0b72746941be3ab3ad48fb21a284ae2fde/perf_knowledge/hardware/cdna4_mi350), [operators/scaled_quant_gemm](../../operator/scaled_quant_gemm/README.md).
 
 ## Block-scaled MFMA element type codes
 The scaled MFMA takes a per-operand type code, enabling **mixed precision** (e.g. FP4 weights × FP6/FP8
@@ -78,7 +78,7 @@ NVIDIA Blackwell, where FP6 is rated at the FP8 rate. Consequence for strategy:
 - Default to **MXFP6** (or mixed MXFP4/MXFP6) over plain MXFP4 unless MXFP4 already passes the gate —
   you pay nothing in throughput.
 - AMD's "near-lossless MXFP4" recipe layers **rotations (QuaRot/Hadamard) + SmoothQuant** before the
-  cast ([calibration_and_quark.md](calibration_and_quark.md), [operators/quant_fp4_mxfp](../../operator/quant_fp4_mxfp/README.md)).
+  cast ([calibration_and_quark.md](calibration_and_quark.md), [operators/quant_fp4_mxfp](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_fp4_mxfp/README.md)).
 
 ## CDNA3 vs CDNA4
 | | CDNA3 (gfx942) | CDNA4 (gfx950) |
@@ -110,7 +110,7 @@ crashes — no HW).
 - MX paper: https://arxiv.org/pdf/2310.10537
 - block-scaled MFMA, type codes, FP6@FP4 rate, CDNA3 vs CDNA4: https://rocm.blogs.amd.com/software-tools-optimization/matrix-cores-cdna/README.html
 - MFMA scale-instruction syntax/operands: https://salykova.github.io/matrix-cores-cdna
-- per-block algorithm, shuffle/pad, even_round: [operators/quant_fp4_mxfp](../../operator/quant_fp4_mxfp/README.md) (`ROCm/aiter@a6bb49937`).
+- per-block algorithm, shuffle/pad, even_round: [operators/quant_fp4_mxfp](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_fp4_mxfp/README.md) (`ROCm/aiter@a6bb49937`).
 
 ## Migration provenance
 

@@ -25,13 +25,13 @@ up/gate `silu·mul`, attn-out `+residual`, and fp8/fp4 output quant feeding the 
 2. **+bias[N]** (free in CShuffle).
 3. **+β·residual[M,N]** (skip-add; folds an [M,N] read+write).
 4. **activation**: relu / gelu / silu / **silu·mul (gated)** — the gated `act_and_mul` on up/gate is the
-   biggest win (removes a [M, inter] pass). See [operators/act_and_mul_silu_gelu/overview.md](../act_and_mul_silu_gelu/README.md).
+   biggest win (removes a [M, inter] pass). See [operators/act_and_mul_silu_gelu/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/act_and_mul_silu_gelu/README.md).
 5. **output quant**: write D as fp8/fp4 with computed scale → next GEMM consumes it directly. See
-   [operators/scaled_quant_gemm/overview.md](../scaled_quant_gemm/README.md), [operators/quant_fp4_mxfp/overview.md](../quant_fp4_mxfp/README.md).
+   [operators/scaled_quant_gemm/overview.md](../scaled_quant_gemm/README.md), [operators/quant_fp4_mxfp/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_fp4_mxfp/README.md).
 
 ## Producer-side neighbors (fused before the GEMM)
 - **RMSNorm + quant → GEMM**: norm and input-quant fused on the producer side →
-  [operators/fused_norm_quant/overview.md](../fused_norm_quant/README.md), [operators/rmsnorm/overview.md](../rmsnorm/README.md).
+  [operators/fused_norm_quant/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/fused_norm_quant/README.md), [operators/rmsnorm/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/rmsnorm/README.md).
 
 ## Why it pays (Amdahl)
 The matmul is compute-bound; each appended epilogue op is ~free vs the FLOPs but each *separate* kernel

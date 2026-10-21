@@ -60,7 +60,7 @@ What attention type does the model use?
   is the SOTA path (MLA decode operates on the absorbed 576-dim latent). Use the shuffled KV
   layout to avoid conversion overhead.
   See [`../operators/attention_decode_paged/`](../../operator/attention_decode_paged/README.md),
-  [`../operators/paged_kv_copy/`](../../operator/paged_kv_copy/README.md).
+  [`../operators/paged_kv_copy/`](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/paged_kv_copy/README.md).
 - **Chunked prefill / extend** = partially-cached requests; AITER FA's extend path handles
   100K+ contexts via ~32K chunks with LSE merging.
   See [`../operators/chunked_prefill/`](../../operator/chunked_prefill/README.md).
@@ -70,7 +70,7 @@ What attention type does the model use?
   Triton decode and craters TPS. If a model has odd head dims, prefer AITER_FA / Triton
   unified paths that support them.
 - **fp8 KV cache** → accuracy-gate, not byte-parity. AITER decode supports fp8 KV; the gain
-  is bandwidth (decode is memory-bound). See [`../operators/kv_cache_quant/`](../../operator/kv_cache_quant/README.md),
+  is bandwidth (decode is memory-bound). See [`../operators/kv_cache_quant/`](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/kv_cache_quant/README.md),
   [`../quantization/`](../quantization/README.md).
 
 ## gfx942 vs gfx950 ranking (from the vLLM ROCm blog, ISL=10K/OSL=1K, 64 conc)

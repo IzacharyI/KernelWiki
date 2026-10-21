@@ -26,7 +26,7 @@ own the exact ISA of the recurrent decode kernel.
 ## SOTA implementation(s)
 | impl | source | gens/dtypes | measured perf | when best |
 |---|---|---|---|---|
-| causal conv1d (HIP/CK) pre-step | aiter `causal_conv1d` (HIP) + Triton variants | gfx942/950; bf16/fp16 | standard fused conv | the GDN conv1d pre-step ([causal_conv1d](../../causal_conv1d/README.md)) |
+| causal conv1d (HIP/CK) pre-step | aiter `causal_conv1d` (HIP) + Triton variants | gfx942/950; bf16/fp16 | standard fused conv | the GDN conv1d pre-step ([causal_conv1d](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/causal_conv1d/README.md)) |
 | custom HIP recurrent decode | author | gfx942/950 | none published | last-resort decode latency tuning |
 
 > **Primarily Triton-portable; runs on MI300X via `triton_amd`. No hand-tuned CK/asm/HIP GDN scan kernel
@@ -56,7 +56,7 @@ bottleneck vs the Triton scan.
 
 ## Alternatives / cross-links
 [overview.md](../README.md) · [triton.md](triton.md) · [tilelang.md](tilelang.md) · languages: `hip_cpp` ·
-`triton_amd` · op: [causal_conv1d](../../causal_conv1d/README.md).
+`triton_amd` · op: [causal_conv1d](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/causal_conv1d/README.md).
 
 ## Sources
 - aiter conv1d (HIP) + Triton GDN: `ROCm/aiter@a6bb49937:aiter/ops/causal_conv1d.py`, `aiter/ops/triton/gated_delta_net/` (on-box).

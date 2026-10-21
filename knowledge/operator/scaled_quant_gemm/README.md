@@ -1,10 +1,12 @@
 # scaled_quant_gemm
 
-8 current AITER implementation references; 13 historical experience cards.
+FP8, INT8, FP4 and microscaled projections, including packing and scale contracts.
+
+8 AITER implementation references; 13 historical experience cards.
 
 ## AITER implementations
 
-Source snapshot: `e9995854abbd`. These pages describe source and validation routes; they do not imply that every implementation has been benchmarked on every GPU.
+Each page pins its source revision. Source references describe implementations and validation routes; they do not establish a measured performance ranking.
 
 | Backend / provider entry | Reference |
 | --- | --- |
@@ -17,13 +19,17 @@ Source snapshot: `e9995854abbd`. These pages describe source and validation rout
 | opus | [Scaled and mixed-precision GEMM — AITER opus](backend/opus_aiter.md) |
 | triton | [Scaled and mixed-precision GEMM — AITER triton](backend/triton_aiter.md) |
 
+### Implementation notes
+
+- [FP4 GEMM input and output contracts](backend/asm_notes.md)
+
 ## Optimization experience
 
 [Learned knowledge](learned_knowledge/README.md) — applicability, outcomes and original evidence.
 
 ## GEAK reference material
 
-The material below is imported from GEAK. Its backend status and performance statements belong to the original source dates. Use the AITER pages above for the current source snapshot.
+The material below is imported from GEAK. Its backend status and performance statements belong to the original source dates. Use the pinned AITER references where available to check current applicability.
 
 <details>
 <summary>Original GEAK metadata</summary>
@@ -85,8 +91,8 @@ sources:
 
 ## Fusion neighbors
 - Input quant (norm+quant) upstream and output quant downstream fuse with the GEMM →
-  [../fused_norm_quant/overview.md](../fused_norm_quant/README.md),
-  [../quant_fp4_mxfp/overview.md](../quant_fp4_mxfp/README.md), [fusion.md](fusion.md).
+  [../fused_norm_quant/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/fused_norm_quant/README.md),
+  [../quant_fp4_mxfp/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_fp4_mxfp/README.md), [fusion.md](fusion.md).
 
 ## Numerics
 - E8M0 block scale application order, fp8 dynamic range, accuracy gating → [numerics.md](numerics.md).

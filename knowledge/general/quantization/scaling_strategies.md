@@ -20,7 +20,7 @@ sources:
 > **dynamic**/runtime-amax). Coarser scales are cheaper but underflow when outliers dominate amax. The
 > safe FP8 default is **per-token dynamic activations × per-channel weights**; block-fp8 (1×128) and
 > MXFP (32-elt) go finer. ROCm dynamic FP8 clamps amax to **224.0** for headroom. Element numerics:
-> [operators/quant_dequant_fp8](../../operator/quant_dequant_fp8/README.md); block scaling: [block_scaling_mxfp.md](block_scaling_mxfp.md).
+> [operators/quant_dequant_fp8](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_dequant_fp8/README.md); block scaling: [block_scaling_mxfp.md](block_scaling_mxfp.md).
 
 ## Axis 1 — granularity
 | granularity | scale shape | accuracy | cost | typical use |
@@ -33,7 +33,7 @@ sources:
 
 **Why finer wins.** A per-tensor scale is set by the single largest element; a few outlier tokens force a
 coarse scale that **underflows the quiet tokens**. Per-token gives each row its own range; per-block
-goes finer still. This is the same argument as MXFP's 32-element block ([operators/quant_fp4_mxfp](../../operator/quant_fp4_mxfp/README.md)).
+goes finer still. This is the same argument as MXFP's 32-element block ([operators/quant_fp4_mxfp](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_fp4_mxfp/README.md)).
 
 **Activations vs weights.** Activations have *token-varying* outliers ⇒ **per-token dynamic**. Weights
 are static ⇒ **per-channel static** (computed once at quantization time). The common FP8 GEMM is
@@ -69,16 +69,16 @@ constexpr auto FP8_E4M3_MAX = 224.0f;
 **Why**: leaving headroom below saturation avoids round-to-saturation artifacts on the largest-magnitude
 elements during dynamic (amax-derived) quant. It also lines up with the OCP→FNUZ conversion, where OCP's
 ±448 maps to ±224 ([fnuz_vs_ocp.md](fnuz_vs_ocp.md)). Static/calibrated paths can use the full range; dynamic paths
-benefit from the margin. Detail + the zero-scale clamp: [operators/quant_dequant_fp8](../../operator/quant_dequant_fp8/README.md).
+benefit from the margin. Detail + the zero-scale clamp: [operators/quant_dequant_fp8](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_dequant_fp8/README.md).
 
 ## Reciprocal-scale & zero-scale hygiene
 - Store **1/s** so the per-element hot path is a multiply, not a divide (`is_scale_inverted` in vLLM).
 - **Clamp scale=0 → 1** on all-zero rows (`scale[scale==0]=1` in aiter `pertoken_quant`) to avoid
-  divide-by-zero ([operators/quant_dequant_fp8](../../operator/quant_dequant_fp8/README.md)).
+  divide-by-zero ([operators/quant_dequant_fp8](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_dequant_fp8/README.md)).
 
 ## Fusion: do the scale where the data already is
 Per-token amax pairs naturally with the preceding norm/activation; fuse the quant into RMSNorm/SiLU to
-avoid an extra pass over activations ([operators/fused_norm_quant](../../operator/fused_norm_quant/README.md), [operators/scaled_quant_gemm](../../operator/scaled_quant_gemm/README.md)).
+avoid an extra pass over activations ([operators/fused_norm_quant](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/fused_norm_quant/README.md), [operators/scaled_quant_gemm](../../operator/scaled_quant_gemm/README.md)).
 
 ## Pitfalls
 - **Per-tensor on outlier-heavy activations** — quiet tokens underflow; use per-token + SmoothQuant.
@@ -97,7 +97,7 @@ avoid an extra pass over activations ([operators/fused_norm_quant](../../operato
 - ROCm granularity / static-vs-dynamic, PTPC-FP8: https://rocm.docs.amd.com/en/latest/how-to/rocm-for-ai/inference-optimization/model-quantization.html
 - Quark schemes (per-tensor/per-channel/per-token, AutoSmoothQuant): https://docs.vllm.ai/en/stable/features/quantization/quark/
 - per-block argument, scaled MFMA: https://rocm.blogs.amd.com/software-tools-optimization/matrix-cores-cdna/README.html
-- 224.0 cap, scale-inverted, zero-scale clamp: [operators/quant_dequant_fp8](../../operator/quant_dequant_fp8/README.md) (`vllm@HEAD:csrc/quantization/fp8/common.cu`, `aiter/ops/quant.py`).
+- 224.0 cap, scale-inverted, zero-scale clamp: [operators/quant_dequant_fp8](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_dequant_fp8/README.md) (`vllm@HEAD:csrc/quantization/fp8/common.cu`, `aiter/ops/quant.py`).
 
 ## Migration provenance
 

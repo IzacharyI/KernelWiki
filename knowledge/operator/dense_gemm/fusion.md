@@ -22,13 +22,13 @@ pass into the GEMM C write-out removes a full [M,N] memory round-trip. The dedic
 ## Fusion neighbors
 - **+bias**: free in the epilogue (CShuffle `D = A·Bᵀ + bias`). Note `bias` is part of aiter's lookup key.
 - **+act (silu/gelu) `act_and_mul`**: the up/gate MLP GEMM fuses the gated activation, removing a
-  separate [M, inter*2] elementwise pass → see [operators/act_and_mul_silu_gelu/overview.md](../act_and_mul_silu_gelu/README.md) and
+  separate [M, inter*2] elementwise pass → see [operators/act_and_mul_silu_gelu/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/act_and_mul_silu_gelu/README.md) and
   [operators/gemm_epilogue_fused/overview.md](../gemm_epilogue_fused/README.md).
 - **+residual add**: fold the skip connection into the epilogue, killing a [M,N] read+write.
 - **+fp8/fp4 quant**: quantize C in the epilogue (scaled write-out) so the next GEMM consumes fp8
-  directly → see [operators/scaled_quant_gemm/overview.md](../scaled_quant_gemm/README.md) and [operators/quant_dequant_fp8/overview.md](../quant_dequant_fp8/README.md).
+  directly → see [operators/scaled_quant_gemm/overview.md](../scaled_quant_gemm/README.md) and [operators/quant_dequant_fp8/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_dequant_fp8/README.md).
 - **norm→GEMM**: RMSNorm+quant before the GEMM is fused on the *producer* side →
-  see [operators/fused_norm_quant/overview.md](../fused_norm_quant/README.md).
+  see [operators/fused_norm_quant/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/fused_norm_quant/README.md).
 
 ## Why it pays (Amdahl)
 GEMM is compute-bound; the appended epilogue is essentially free vs the matmul FLOPs, but the *separate*

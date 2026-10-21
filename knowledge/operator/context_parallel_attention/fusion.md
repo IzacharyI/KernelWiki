@@ -32,10 +32,10 @@ into the kernel where possible:
   bigger messages; pick ring vs all-to-all by message-size vs overlap tradeoff.
 
 ## Cross-links
-- Collectives: [all_to_all_dispatch_combine](../all_to_all_dispatch_combine/README.md) · [allgather](../allgather/README.md) · [reduce_scatter](../reduce_scatter/README.md) ·
-  [fused_allreduce_rmsnorm](../fused_allreduce_rmsnorm/README.md) (related fused comm).
+- Collectives: [all_to_all_dispatch_combine](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/all_to_all_dispatch_combine/README.md) · [allgather](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/allgather/README.md) · [reduce_scatter](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/reduce_scatter/README.md) ·
+  [fused_allreduce_rmsnorm](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/fused_allreduce_rmsnorm/README.md) (related fused comm).
 - Local attention: [attention_prefill_fmha](../attention_prefill_fmha/README.md) · [chunked_prefill](../chunked_prefill/README.md) (extend/prefix path).
-- KV: [paged_kv_copy](../paged_kv_copy/README.md) · [kv_cache_quant](../kv_cache_quant/README.md).
+- KV: [paged_kv_copy](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/paged_kv_copy/README.md) · [kv_cache_quant](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/kv_cache_quant/README.md).
 - Languages/backends: `triton_amd` · `aiter` · `sglang_kernels` · `mori_rccl` (EP all-to-all).
 
 ## Sources

@@ -20,7 +20,7 @@ sources:
 ## Fusion neighbors
 - **Bias + activation epilogue** after the split-K reduction → [../gemm_epilogue_fused/overview.md](../gemm_epilogue_fused/README.md).
 - **Upstream norm+quant**: rmsnorm→fp8 quant feeding the decode GEMM input →
-  [../fused_norm_quant/overview.md](../fused_norm_quant/README.md).
+  [../fused_norm_quant/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/fused_norm_quant/README.md).
 - **fp8 dequant scale** in epilogue → [../scaled_quant_gemm/fusion.md](../scaled_quant_gemm/fusion.md).
 - **Decode MoE**: tiny per-expert M makes the grouped GEMM behave like many skinny GEMMs →
   [../grouped_gemm_moe/overview.md](../grouped_gemm_moe/README.md).

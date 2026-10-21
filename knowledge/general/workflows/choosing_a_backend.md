@@ -43,18 +43,18 @@ same-session A/B on the immutable oracle are the judge
 ## Editable custom kernels (norms / rope / act / elementwise)
 | operator family | try first | notes |
 |---|---|---|
-| **rmsnorm / fused_add_rmsnorm / layernorm** | aiter fused → Triton (editable) | fuse residual-add. small Amdahl mass each → **stack**. [`../operators/rmsnorm/`](../../operator/rmsnorm/README.md) |
-| **rope / mrope** | aiter fused rope+kvcache → Triton | [`../operators/rope/`](../../operator/rope/README.md) |
-| **act_and_mul (silu/gelu)** | aiter → Triton; fuse into GEMM epilogue | [`../operators/act_and_mul_silu_gelu/`](../../operator/act_and_mul_silu_gelu/README.md), [`../operators/gemm_epilogue_fused/`](../../operator/gemm_epilogue_fused/README.md) |
-| **softmax / sampling / argmax_topk** | Triton (editable) → aiter | [`../operators/sampling_topk_topp/`](../../operator/sampling_topk_topp/README.md) |
+| **rmsnorm / fused_add_rmsnorm / layernorm** | aiter fused → Triton (editable) | fuse residual-add. small Amdahl mass each → **stack**. [`../operators/rmsnorm/`](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/rmsnorm/README.md) |
+| **rope / mrope** | aiter fused rope+kvcache → Triton | [`../operators/rope/`](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/rope/README.md) |
+| **act_and_mul (silu/gelu)** | aiter → Triton; fuse into GEMM epilogue | [`../operators/act_and_mul_silu_gelu/`](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/act_and_mul_silu_gelu/README.md), [`../operators/gemm_epilogue_fused/`](../../operator/gemm_epilogue_fused/README.md) |
+| **softmax / sampling / argmax_topk** | Triton (editable) → aiter | [`../operators/sampling_topk_topp/`](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/sampling_topk_topp/README.md) |
 | **quant/dequant (fp8/fp4/int8), kv_cache_quant** | aiter scaled-quant → fused_norm_quant → Triton | accuracy-gate. [`../quantization/`](../quantization/README.md) |
 
 ## Collectives / MoE dispatch
 | operator | try first | notes |
 |---|---|---|
-| **allreduce** | QuickReduce (up to 3× on MI300X, no code change) → RCCL/aiter | [`../operators/allreduce/`](../../operator/allreduce/README.md), [`../backends/mori_rccl/`](../libraries/mori_rccl/overview.md) |
+| **allreduce** | QuickReduce (up to 3× on MI300X, no code change) → RCCL/aiter | [`../operators/allreduce/`](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/allreduce/README.md), [`../backends/mori_rccl/`](../libraries/mori_rccl/overview.md) |
 | **moe_dispatch_combine / all_to_all** | aiter / MoRI | [`../operators/moe_dispatch_combine/`](../../operator/moe_dispatch_combine/README.md) |
-| **allgather / reduce_scatter** | RCCL/aiter → MoRI | [`../operators/allgather/`](../../operator/allgather/README.md) |
+| **allgather / reduce_scatter** | RCCL/aiter → MoRI | [`../operators/allgather/`](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/allgather/README.md) |
 
 ## The cross-family heuristics (from the decision trees)
 - **Serving stack routes through aiter (sglang/vLLM)?** → tune the aiter DB FIRST (it's the

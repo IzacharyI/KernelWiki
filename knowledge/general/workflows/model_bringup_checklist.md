@@ -49,8 +49,8 @@ the parent. Diagnostic ladder if AITER paths break: `AITER_ONLINE_TUNE=1` →
 - Easiest path: AMD pre-quantized **Quark** checkpoints (FP8 W8A8, MXFP4 preview). Custom →
   Quark toolchain (AutoSmoothQuant; MXFP4 typically mixes fp8 per-tensor weight/act/kv +
   fp4 per-group). KV cache: add `--kv-cache-dtype fp8` for ~2× seq/batch headroom.
-- See [`../quantization/`](../quantization/README.md), [`../operators/quant_fp4_mxfp/`](../../operator/quant_fp4_mxfp/README.md),
-  [`../operators/kv_cache_quant/`](../../operator/kv_cache_quant/README.md), [`../hardware/cdna4_mi350/`](https://github.com/AMD-AGI/GEAK/blob/02bfbb0b72746941be3ab3ad48fb21a284ae2fde/perf_knowledge/hardware/cdna4_mi350).
+- See [`../quantization/`](../quantization/README.md), [`../operators/quant_fp4_mxfp/`](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_fp4_mxfp/README.md),
+  [`../operators/kv_cache_quant/`](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/kv_cache_quant/README.md), [`../hardware/cdna4_mi350/`](https://github.com/AMD-AGI/GEAK/blob/02bfbb0b72746941be3ab3ad48fb21a284ae2fde/perf_knowledge/hardware/cdna4_mi350).
 
 ## 3. Attention backend
 Defaults are usually best (auto-select with `VLLM_ROCM_USE_AITER=1`): ROCM_AITER_FA for
@@ -65,7 +65,7 @@ ROCM_ATTN on models with unsupported KV head dims (silent Triton fallback → bi
 - **DP on ROCm:** `VLLM_ALL2ALL_BACKEND="allgather_reducescatter"` +
   `--disable-nccl-for-dp-synchronization`.
 - Collectives: **QuickReduce** (up to 3× allreduce on MI300X, no code change) / RCCL / MoRI
-  (MI355X + sglang for cost-efficient MoE). See [`../operators/allreduce/`](../../operator/allreduce/README.md),
+  (MI355X + sglang for cost-efficient MoE). See [`../operators/allreduce/`](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/allreduce/README.md),
   [`../backends/mori_rccl/`](../libraries/mori_rccl/overview.md).
 > Note: the e2e *tuning* runs use **TP=1** for deterministic Amdahl accounting
 > ([`optimize_e2e_model.md`](optimize_e2e_model.md)); collective config is tuned here at
@@ -73,8 +73,8 @@ ROCM_ATTN on models with unsupported KV head dims (silent Triton fallback → bi
 
 ## 5. Fused norms / MoE path / collectives (kernel levers)
 - **Fused norms:** fused add+RMSNorm, fused RMSNorm-quant, LayerNorm/SiLU fp8 block quant —
-  small Amdahl mass each → **stack**. [`../operators/fused_add_rmsnorm/`](../../operator/fused_add_rmsnorm/README.md),
-  [`../operators/fused_norm_quant/`](../../operator/fused_norm_quant/README.md).
+  small Amdahl mass each → **stack**. [`../operators/fused_add_rmsnorm/`](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/fused_add_rmsnorm/README.md),
+  [`../operators/fused_norm_quant/`](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/fused_norm_quant/README.md).
 - **MoE:** aiter `fused_moe` auto-selects the quant kernel (moe-2stages, fp8-blockscale_g1u1,
   MXFP4 w4a4). Tune via `AITER_CONFIG_FMOE`. Watch the **AITER-gating bug** (expert mask
   gated on global AITER-on vs the actual matmul backend → wrong-expert routing when MXFP4

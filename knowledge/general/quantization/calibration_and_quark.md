@@ -35,7 +35,7 @@ for ~4× compression at FP8-class accuracy. Scales across multiple GPUs for ultr
 | **SmoothQuant / AutoSmoothQuant** | `--quant_algo autosmoothquant` | migrate activation outliers into weights (α per-layer by MSE) | W8A8 / per-token FP8 ([scaling_strategies.md](scaling_strategies.md)) |
 | **AWQ** | `--quant_algo awq` | activation-aware weight scaling, protect salient channels | INT4/INT8 weight-only |
 | **GPTQ** | `--quant_algo gptq` | second-order error-compensated weight rounding | INT4/INT8 weight-only |
-| **QuaRot** (rotations) | Hadamard transform | rotate away activation outliers before low-bit cast | near-lossless **MXFP4** ([operators/quant_fp4_mxfp](../../operator/quant_fp4_mxfp/README.md)) |
+| **QuaRot** (rotations) | Hadamard transform | rotate away activation outliers before low-bit cast | near-lossless **MXFP4** ([operators/quant_fp4_mxfp](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_fp4_mxfp/README.md)) |
 Quark's API lets you **compose** these (e.g. rotation → SmoothQuant → GPTQ).
 
 ## Calibration — what & how much

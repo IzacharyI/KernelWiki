@@ -1,10 +1,12 @@
 # qk_norm_rope_cache
 
-5 current AITER implementation references; 0 historical experience cards.
+Fused Q/K normalization, positional encoding, quantization and cache writes.
+
+5 AITER implementation references; 0 historical experience cards.
 
 ## AITER implementations
 
-Source snapshot: `e9995854abbd`. These pages describe source and validation routes; they do not imply that every implementation has been benchmarked on every GPU.
+Each page pins its source revision. Source references describe implementations and validation routes; they do not establish a measured performance ranking.
 
 | Backend / provider entry | Reference |
 | --- | --- |

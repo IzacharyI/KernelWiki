@@ -21,8 +21,8 @@ sources:
 | **indexer / fp8 MQA logits** | the selection score | DeepSeek runs it in fp8; its output ranks blocks (top-k). Kept as its own kernel (it's the hot path) |
 | **online top-k** | inside the indexer epilogue | avoids materializing the full score matrix (FLA) |
 | **fnuz quantise-and-insert KV** | KV-cache write | fused quantise + paged insert so cache bytes match the fnuz dialect (V4 bring-up) |
-| **RoPE / qk-norm** | before scoring | standard ([rope](../rope/README.md), [rmsnorm](../rmsnorm/README.md)) |
-| **gather of selected blocks** | the selected-branch load | indexed/masked `buffer_load`; the non-contiguous gather is the perf-sensitive seam ([gather_scatter](../gather_scatter/README.md)) |
+| **RoPE / qk-norm** | before scoring | standard ([rope](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/rope/README.md), [rmsnorm](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/rmsnorm/README.md)) |
+| **gather of selected blocks** | the selected-branch load | indexed/masked `buffer_load`; the non-contiguous gather is the perf-sensitive seam ([gather_scatter](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/gather_scatter/README.md)) |
 
 ## What FSA deliberately *splits* (anti-fusion)
 Flash Sparse Attention found that **decoupling** is faster than one mega-kernel for the selected branch:
@@ -33,8 +33,8 @@ This avoids loop-order stalls from non-contiguous query access — so for the se
 fusion can win on AMD. Benchmark both.
 
 ## Cross-links
-- Sliding branch: [sliding_window_attention](../sliding_window_attention/README.md) · selection: [argmax_topk](../argmax_topk/README.md) · gather: [gather_scatter](../gather_scatter/README.md) /
-  [paged_kv_copy](../paged_kv_copy/README.md) · KV quant: [kv_cache_quant](../kv_cache_quant/README.md) · MLA base: [mla_attention](../mla_attention/README.md).
+- Sliding branch: [sliding_window_attention](../sliding_window_attention/README.md) · selection: [argmax_topk](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/argmax_topk/README.md) · gather: [gather_scatter](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/gather_scatter/README.md) /
+  [paged_kv_copy](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/paged_kv_copy/README.md) · KV quant: [kv_cache_quant](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/kv_cache_quant/README.md) · MLA base: [mla_attention](../mla_attention/README.md).
 - Languages: `triton_amd` (portable path), `hip_cpp` (gather/indexer helpers), `tilelang`.
 - aiter dispatcher: `aiter`.
 

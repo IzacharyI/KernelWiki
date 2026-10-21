@@ -30,9 +30,9 @@ kernel, so the norm output is written **already quantized**. Two wins from one f
 
 So although the norm itself is only **1–4% of GPU time**, the fusion's real value lands on the
 **GEMM that consumes the quantized output**. Operator overview:
-[`../../operators/fused_norm_quant/overview.md`](../../../operator/fused_norm_quant/README.md).
-This is the [`../../operators/rmsnorm/`](../../../operator/rmsnorm/README.md) +
-[`../../operators/quant_dequant_fp8/`](../../../operator/quant_dequant_fp8/README.md) seam.
+[`../../operators/fused_norm_quant/overview.md`](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/fused_norm_quant/README.md).
+This is the [`../../operators/rmsnorm/`](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/rmsnorm/README.md) +
+[`../../operators/quant_dequant_fp8/`](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_dequant_fp8/README.md) seam.
 
 ## Baseline
 - **Unfused path:** RMSNorm writes bf16 → a separate dynamic-quant kernel reads bf16, writes fp8
@@ -69,7 +69,7 @@ This is the [`../../operators/rmsnorm/`](../../../operator/rmsnorm/README.md) +
 The fusion is the **sibling lever** to the `act_and_mul` output-quant on the MLP down-proj side,
 and the QK-norm+RoPE+quant variant (`fused_qk_rmsnorm_group_quant`,
 `fused_qk_norm_rope_cache_quant`) is the attention-entry form. See
-[`../../operators/fused_norm_quant/fusion.md`](../../../operator/fused_norm_quant/fusion.md).
+[`../../operators/fused_norm_quant/fusion.md`](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/fused_norm_quant/fusion.md).
 
 ## Lessons
 1. **Fuse the norm for the GEMM, not for the norm.** The 1–4% norm is not the prize; the halved
@@ -81,8 +81,8 @@ and the QK-norm+RoPE+quant variant (`fused_qk_rmsnorm_group_quant`,
    carry-forward lever that compounds with the GEMM-side fp8 path, not a standalone headliner.
 
 ## Cross-links
-- Operator: [`../../operators/fused_norm_quant/overview.md`](../../../operator/fused_norm_quant/README.md) · numerics: [`../../operators/fused_norm_quant/numerics.md`](../../../operator/fused_norm_quant/numerics.md) · aiter card: [`../../operators/fused_norm_quant/backends/aiter.md`](../../../operator/fused_norm_quant/backend/aiter.md)
-- Seam: [`../../operators/rmsnorm/`](../../../operator/rmsnorm/README.md) · [`../../operators/quant_dequant_fp8/`](../../../operator/quant_dequant_fp8/README.md) · [`../../operators/fused_add_rmsnorm/`](../../../operator/fused_add_rmsnorm/README.md)
+- Operator: [`../../operators/fused_norm_quant/overview.md`](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/fused_norm_quant/README.md) · numerics: [`../../operators/fused_norm_quant/numerics.md`](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/fused_norm_quant/numerics.md) · aiter card: [`../../operators/fused_norm_quant/backends/aiter.md`](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/fused_norm_quant/backend/aiter.md)
+- Seam: [`../../operators/rmsnorm/`](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/rmsnorm/README.md) · [`../../operators/quant_dequant_fp8/`](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_dequant_fp8/README.md) · [`../../operators/fused_add_rmsnorm/`](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/fused_add_rmsnorm/README.md)
 - Fusion strategy: [`../../optimization/kernel_fusion_strategy.md`](../../optimization/kernel_fusion_strategy.md)
 - fp8 serving recipe: [`../by_model/llama_fp8_serving.md`](../by_model/llama_fp8_serving.md) · quant: [`../../quantization/`](../../quantization/README.md)
 - The GEMM that consumes the output: [`gemm_aiter_db_tuning.md`](gemm_aiter_db_tuning.md) · [`../../operators/scaled_quant_gemm/`](../../../operator/scaled_quant_gemm/README.md)

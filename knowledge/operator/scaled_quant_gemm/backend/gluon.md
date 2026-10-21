@@ -74,7 +74,7 @@ TRITON_ENABLE_LLIR_SCHED=1 TRITON_ENABLE_AMDGCN_AS=1 \
 [operators/scaled_quant_gemm/backends/hipblaslt](hipblaslt.md) (no-tune bar ~3130) ·
 [operators/scaled_quant_gemm/backends/hip](hip.md) (8-wave ping-pong 3204, 4-wave interleave) ·
 [operators/scaled_quant_gemm/backends/aiter](aiter.md) (block-scale + dispatch) ·
-[operators/dense_gemm/backends/gluon](../../dense_gemm/backend/gluon.md) (FP16) · [operators/quant_fp4_mxfp/backends/gluon](../../quant_fp4_mxfp/backend/gluon.md) (MXFP4) ·
+[operators/dense_gemm/backends/gluon](../../dense_gemm/backend/gluon.md) (FP16) · [operators/quant_fp4_mxfp/backends/gluon](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_fp4_mxfp/backend/gluon.md) (MXFP4) ·
 [languages/gluon](../../../general/backend/gluon/overview.md) · [languages/triton_amd](../../../general/backend/triton_amd/overview.md) · [optimization/mfma_scheduling](../../../general/optimization/mfma_scheduling.md)
 
 ## Sources

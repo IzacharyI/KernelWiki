@@ -1,10 +1,12 @@
 # mla_attention
 
-7 current AITER implementation references; 0 historical experience cards.
+Multi-head latent attention, compressed KV and decode/prefill variants.
+
+7 AITER implementation references; 0 historical experience cards.
 
 ## AITER implementations
 
-Source snapshot: `e9995854abbd`. These pages describe source and validation routes; they do not imply that every implementation has been benchmarked on every GPU.
+Each page pins its source revision. Source references describe implementations and validation routes; they do not establish a measured performance ranking.
 
 | Backend / provider entry | Reference |
 | --- | --- |
@@ -16,7 +18,7 @@ Source snapshot: `e9995854abbd`. These pages describe source and validation rout
 | opus | [Multi-head latent attention — AITER opus](backend/opus_aiter.md) |
 | triton | [Multi-head latent attention — AITER triton](backend/triton_aiter.md) |
 
-## Implementation notes
+### Implementation notes
 
 - [AITER MLA: cache layout, causal queries and backend dispatch](backend/aiter_notes.md)
 
@@ -26,7 +28,7 @@ Source snapshot: `e9995854abbd`. These pages describe source and validation rout
 
 ## GEAK reference material
 
-The material below is imported from GEAK. Its backend status and performance statements belong to the original source dates. Use the AITER pages above for the current source snapshot.
+The material below is imported from GEAK. Its backend status and performance statements belong to the original source dates. Use the pinned AITER references where available to check current applicability.
 
 <details>
 <summary>Original GEAK metadata</summary>

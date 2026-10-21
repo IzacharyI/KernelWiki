@@ -21,8 +21,8 @@ of activations), **norm + quant**, **rope + KV-cache write**, and **comm + norm*
 fused with RMSNorm). Do **not** fuse when it kills occupancy, blocks a faster library kernel, or hurts
 reuse. First classify the kernels (`[optimization/roofline_and_bottlenecks.md](roofline_and_bottlenecks.md)`) — fusion only pays
 when it changes the binding bottleneck. See `[operators/gemm_epilogue_fused/overview.md](../../operator/gemm_epilogue_fused/README.md)`,
-`[operators/fused_norm_quant/overview.md](../../operator/fused_norm_quant/README.md)`, `[operators/fused_add_rmsnorm/overview.md](../../operator/fused_add_rmsnorm/README.md)`,
-`[operators/fused_allreduce_rmsnorm/overview.md](../../operator/fused_allreduce_rmsnorm/README.md)`.
+`[operators/fused_norm_quant/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/fused_norm_quant/README.md)`, `[operators/fused_add_rmsnorm/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/fused_add_rmsnorm/README.md)`,
+`[operators/fused_allreduce_rmsnorm/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/fused_allreduce_rmsnorm/README.md)`.
 
 ## Why fusion helps (the mechanics)
 - **Removes a HBM pass**: two BW-bound elementwise ops chained through HBM ⇒ fuse to read once, write
@@ -31,24 +31,24 @@ when it changes the binding bottleneck. See `[operators/gemm_epilogue_fused/over
   VALU/memory cycles; folding the bias/activation/quant epilogue (or the input dequant prologue) into
   it costs ~free time (`[optimization/mfma_scheduling.md](mfma_scheduling.md)`).
 - **Overlaps comm with compute**: comm+norm fusion lets the collective progress while the norm's VALU
-  work runs (`[operators/fused_allreduce_rmsnorm/overview.md](../../operator/fused_allreduce_rmsnorm/README.md)`,
-  `[operators/reduce_scatter/overview.md](../../operator/reduce_scatter/README.md)`).
+  work runs (`[operators/fused_allreduce_rmsnorm/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/fused_allreduce_rmsnorm/README.md)`,
+  `[operators/reduce_scatter/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/reduce_scatter/README.md)`).
 
 ## High-value fusions (when to fuse)
 | fusion | donor / pattern | payoff | card |
 |---|---|---|---|
 | **epilogue → GEMM** (bias, act, scale, fp8 quant) | GEMM donor | free epilogue, no C round-trip; use `OPTIMIZE_EPILOGUE=1` | `[operators/gemm_epilogue_fused/overview.md](../../operator/gemm_epilogue_fused/README.md)`, `[operators/scaled_quant_gemm/overview.md](../../operator/scaled_quant_gemm/README.md)` |
 | **prologue → GEMM** (dequant / norm of A) | GEMM donor | skip a pre-pass over activations | `[operators/dense_gemm/overview.md](../../operator/dense_gemm/README.md)` |
-| **norm + quant** | both BW-bound | one pass, one write of quantized out + scale | `[operators/fused_norm_quant/overview.md](../../operator/fused_norm_quant/README.md)`, `[operators/quant_dequant_fp8/overview.md](../../operator/quant_dequant_fp8/README.md)` |
-| **add + RMSNorm** (residual) | BW-bound chain | fuse residual add into norm | `[operators/fused_add_rmsnorm/overview.md](../../operator/fused_add_rmsnorm/README.md)` |
-| **rope + KV-cache write** | BW/latency-bound | apply rope and write paged KV in one pass | `[operators/rope/overview.md](../../operator/rope/README.md)`, `[operators/paged_kv_copy/overview.md](../../operator/paged_kv_copy/README.md)` |
-| **comm + norm** (all-reduce/all-gather + RMSNorm) | overlap comm/compute | hide collective latency | `[operators/fused_allreduce_rmsnorm/overview.md](../../operator/fused_allreduce_rmsnorm/README.md)` |
+| **norm + quant** | both BW-bound | one pass, one write of quantized out + scale | `[operators/fused_norm_quant/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/fused_norm_quant/README.md)`, `[operators/quant_dequant_fp8/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_dequant_fp8/README.md)` |
+| **add + RMSNorm** (residual) | BW-bound chain | fuse residual add into norm | `[operators/fused_add_rmsnorm/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/fused_add_rmsnorm/README.md)` |
+| **rope + KV-cache write** | BW/latency-bound | apply rope and write paged KV in one pass | `[operators/rope/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/rope/README.md)`, `[operators/paged_kv_copy/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/paged_kv_copy/README.md)` |
+| **comm + norm** (all-reduce/all-gather + RMSNorm) | overlap comm/compute | hide collective latency | `[operators/fused_allreduce_rmsnorm/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/fused_allreduce_rmsnorm/README.md)` |
 | **moe routing + dispatch** | latency-bound | fewer launches, less traffic | `[operators/moe_dispatch_combine/overview.md](../../operator/moe_dispatch_combine/README.md)` |
 
 ## Fusion donors (what to fold *into*)
 - **GEMM / attention** — the biggest donors (deep MFMA pipeline absorbs epilogue/prologue work).
 - **A norm pass** — absorbs residual add, quant, scale compute.
-- **A copy/cast pass** — absorbs quant or layout shuffle (`[operators/layout_shuffle/overview.md](../../operator/layout_shuffle/README.md)`).
+- **A copy/cast pass** — absorbs quant or layout shuffle (`[operators/layout_shuffle/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/layout_shuffle/README.md)`).
 
 ## When NOT to fuse
 - **It blocks a faster library kernel**: a hand-fused GEMM+epilogue that loses to aiter's tuned GEMM +

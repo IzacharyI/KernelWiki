@@ -12,11 +12,13 @@ performance_status: not_measured_in_kernelwiki
 
 # Prefill and full attention — AITER hip
 
-Tiled attention interleaves QK products, online softmax and probability-value products. Causal/variable-length masks, dropout or backward outputs distinguish entry points with similar names.
+Tiled attention interleaves QK products, online softmax and probability-value products. Inference paths require the correct causal or variable-length mask, head layout and KV-cache contract. Use forward entry points with dropout disabled.
 
 HIP implementations are reached through JIT bindings or native wrappers. Track compile-time templates and dispatch conditions as well as launch dimensions; changing a source file requires confirming that the rebuilt module is loaded.
 
 ## Scope and evidence
+
+This page selects LLM inference paths. Shared upstream files and test suites can also contain training code; use their forward cases with gradients and dropout disabled. Explicit gradient-only implementations, tests and configurations are omitted.
 
 The source links below are pinned to AITER `e9995854abbd`. **Recent** means the file changed between 2026-07-21 and this snapshot. The symbol lists and parameter names are extracted from source; they include helpers as well as entry points. They do not certify runtime dispatch, hardware support or a measured speedup.
 
@@ -57,12 +59,6 @@ Symbols: [`ceil_div`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19
 [Source](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/csrc/include/fmha_fwd_hd192_v128_bf16_opus_kernel.hpp) · **Recent**
 
 Symbols: [`sched_mfma_valu`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/csrc/include/fmha_fwd_hd192_v128_bf16_opus_kernel.hpp#L42), [`sched_mfma_exp`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/csrc/include/fmha_fwd_hd192_v128_bf16_opus_kernel.hpp#L49), [`sched_mfma_exp_valu`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/csrc/include/fmha_fwd_hd192_v128_bf16_opus_kernel.hpp#L57), [`sched_mfma_tail`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/csrc/include/fmha_fwd_hd192_v128_bf16_opus_kernel.hpp#L65), [`attn_row_max`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/csrc/include/fmha_fwd_hd192_v128_bf16_opus_kernel.hpp#L71), [`attn_scale_sub_row`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/csrc/include/fmha_fwd_hd192_v128_bf16_opus_kernel.hpp#L82), [`attn_scale_sub_row_slice`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/csrc/include/fmha_fwd_hd192_v128_bf16_opus_kernel.hpp#L93), [`attn_exp2_slice`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/csrc/include/fmha_fwd_hd192_v128_bf16_opus_kernel.hpp#L104), [`attn_sum`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/csrc/include/fmha_fwd_hd192_v128_bf16_opus_kernel.hpp#L112), [`scale_output_tile`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/csrc/include/fmha_fwd_hd192_v128_bf16_opus_kernel.hpp#L123), [`pin_output_tile`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/csrc/include/fmha_fwd_hd192_v128_bf16_opus_kernel.hpp#L132), [`async_load_range`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/csrc/include/fmha_fwd_hd192_v128_bf16_opus_kernel.hpp#L148), [`make_layout_o_x4`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/csrc/include/fmha_fwd_hd192_v128_bf16_opus_kernel.hpp#L165), [`make_layout_g`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/csrc/include/fmha_fwd_hd192_v128_bf16_opus_kernel.hpp#L187), [`make_layout_sq`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/csrc/include/fmha_fwd_hd192_v128_bf16_opus_kernel.hpp#L213), [`make_layout_s`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/csrc/include/fmha_fwd_hd192_v128_bf16_opus_kernel.hpp#L234), [`make_layout_rq`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/csrc/include/fmha_fwd_hd192_v128_bf16_opus_kernel.hpp#L252), [`make_layout_rk_su`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/csrc/include/fmha_fwd_hd192_v128_bf16_opus_kernel.hpp#L284), [`make_layout_rv_su`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/csrc/include/fmha_fwd_hd192_v128_bf16_opus_kernel.hpp#L315), [`attn_mask_vec2_imm`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/csrc/include/fmha_fwd_hd192_v128_bf16_opus_kernel.hpp#L353), [`attn_mask_causal_tile`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/csrc/include/fmha_fwd_hd192_v128_bf16_opus_kernel.hpp#L368), [`attn_mask_border_tile`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/csrc/include/fmha_fwd_hd192_v128_bf16_opus_kernel.hpp#L414), [`__attribute__`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/csrc/include/fmha_fwd_hd192_v128_bf16_opus_kernel.hpp#L460), [`s_frag_t`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/csrc/include/fmha_fwd_hd192_v128_bf16_opus_kernel.hpp#L656), [`__launch_bounds__`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/csrc/include/fmha_fwd_hd192_v128_bf16_opus_kernel.hpp#L1110).
-
-### `csrc/include/mha_bwd.h`
-
-[Source](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/csrc/include/mha_bwd.h) · **Recent**
-
-Native implementation or support code; inspect its callers and bindings to identify the selected specialization.
 
 ### `csrc/include/mha_v4_quant.h`
 
@@ -136,21 +132,9 @@ Native implementation or support code; inspect its callers and bindings to ident
 
 Native implementation or support code; inspect its callers and bindings to identify the selected specialization.
 
-### `csrc/include/torch/mha_bwd.h`
-
-[Source](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/csrc/include/torch/mha_bwd.h)
-
-Native implementation or support code; inspect its callers and bindings to identify the selected specialization.
-
 ### `csrc/include/torch/mha_fwd.h`
 
 [Source](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/csrc/include/torch/mha_fwd.h)
-
-Native implementation or support code; inspect its callers and bindings to identify the selected specialization.
-
-### `csrc/include/torch/mha_v3_bwd.h`
-
-[Source](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/csrc/include/torch/mha_v3_bwd.h)
 
 Native implementation or support code; inspect its callers and bindings to identify the selected specialization.
 
@@ -160,21 +144,9 @@ Native implementation or support code; inspect its callers and bindings to ident
 
 Native implementation or support code; inspect its callers and bindings to identify the selected specialization.
 
-### `csrc/include/torch/mha_v3_varlen_bwd.h`
-
-[Source](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/csrc/include/torch/mha_v3_varlen_bwd.h)
-
-Native implementation or support code; inspect its callers and bindings to identify the selected specialization.
-
 ### `csrc/include/torch/mha_v3_varlen_fwd.h`
 
 [Source](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/csrc/include/torch/mha_v3_varlen_fwd.h)
-
-Native implementation or support code; inspect its callers and bindings to identify the selected specialization.
-
-### `csrc/include/torch/mha_varlen_bwd.h`
-
-[Source](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/csrc/include/torch/mha_varlen_bwd.h)
 
 Native implementation or support code; inspect its callers and bindings to identify the selected specialization.
 
@@ -261,7 +233,6 @@ Native implementation or support code; inspect its callers and bindings to ident
 Related tests for this operator family are listed below. Select the entry point and backend that match the implementation; the presence of a test does not mean KernelWiki ran it or that every backend is covered.
 
 - [op_tests/cpp/mha/compile.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/cpp/mha/compile.py)
-- [op_tests/op_benchmarks/flydsl/bench_mha_bwd.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/op_benchmarks/flydsl/bench_mha_bwd.py)
 - [op_tests/op_benchmarks/flydsl/bench_mha_fwd.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/op_benchmarks/flydsl/bench_mha_fwd.py)
 - [op_tests/op_benchmarks/triton/bench_attn_res.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/op_benchmarks/triton/bench_attn_res.py)
 - [op_tests/op_benchmarks/triton/bench_deepgemm_attention.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/op_benchmarks/triton/bench_deepgemm_attention.py)
@@ -275,7 +246,6 @@ Related tests for this operator family are listed below. Select the entry point 
 - [op_tests/test_fmha_fwd_with_sink_varlen_asm.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/test_fmha_fwd_with_sink_varlen_asm.py)
 - [op_tests/test_mha.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/test_mha.py)
 - [op_tests/test_mha_flydsl.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/test_mha_flydsl.py)
-- [op_tests/test_mha_flydsl_varlen_bwd.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/test_mha_flydsl_varlen_bwd.py)
 - [op_tests/test_mha_fp8.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/test_mha_fp8.py)
 - [op_tests/test_mha_native_splitkv.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/test_mha_native_splitkv.py)
 - [op_tests/test_mha_optional_flydsl.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/test_mha_optional_flydsl.py)
@@ -307,7 +277,7 @@ Related tests for this operator family are listed below. Select the entry point 
 
 ## Performance and validation
 
-Record sequence lengths, masks, heads and dtypes. Use the matching forward or backward reference; do not compare kernel latency with an end-to-end serving metric.
+Record sequence lengths, masks, heads and dtypes. Use the matching forward reference with dropout disabled; do not compare kernel latency with an end-to-end serving metric.
 
 No new GPU timings were collected for this page. Record GPU model, ROCm/compiler/library versions, full shape and strides, input/output dtypes, warmup and timing method, baseline implementation, latency and correctness tolerance before claiming a win. Compare speedups only within the same benchmark protocol and baseline.
 

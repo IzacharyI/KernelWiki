@@ -60,7 +60,7 @@ consistent with the routed path so they share the dequant epilogue. fnuz on gfx9
 ## Sources
 - aiter shared-expert fusion internals (token-range, stage1/2 sorting, atomic-add, padded M): `ROCm/aiter@a6bb49937:aiter/fused_moe_dp_shared_expert.py`.
 - shared-as-routed + MoRI incompatibility: https://rocm.blogs.amd.com/software-tools-optimization/wide-ep-deepseek/README.html
-- multi-queue overlap (`GPU_MAX_HW_QUEUES`): [allreduce](../allreduce/README.md) / RCCL tuning, MI300X workload guide.
+- multi-queue overlap (`GPU_MAX_HW_QUEUES`): [allreduce](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/allreduce/README.md) / RCCL tuning, MI300X workload guide.
 
 ## Migration provenance
 

@@ -20,7 +20,7 @@ scan so S never round-trips to HBM. The aiter on-box kernels show exactly which 
 | fused piece | aiter kernel (on-box) | why |
 |---|---|---|
 | **QKV(z,b,a) split** | `fused_qkvzba_split.py` | one projection output → split into q/k/v/gates without an HBM bounce |
-| **causal conv1d + split** | `prefill/causal_conv1d_fwd_split_qkv.py`, `decode/causal_conv1d_split_qkv.py` | local mixing fused with the split ([causal_conv1d](../causal_conv1d/README.md)) |
+| **causal conv1d + split** | `prefill/causal_conv1d_fwd_split_qkv.py`, `decode/causal_conv1d_split_qkv.py` | local mixing fused with the split ([causal_conv1d](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/causal_conv1d/README.md)) |
 | **L2-norm Q/K** | in-kernel (`use_qk_l2norm_in_kernel`) | avoids a separate norm pass |
 | **GDN gating (sigmoid)** | `fused_gdn_gating_prefill.py`, `decode/fused_sigmoid_gating_recurrent.py` | gate computed where it's used |
 | **cumsum of decays + KKᵀ** | `fused_cumsum_kkt.py` | the chunk's serial decay/score prep |
@@ -39,7 +39,7 @@ any single micro-fusion.
 10–50× slower because the bottleneck is state bandwidth, not compute. Never split the state update.
 
 ## Cross-links
-- Pre-step: [causal_conv1d](../causal_conv1d/README.md) · norm: [rmsnorm](../rmsnorm/README.md) (L2-norm variant) · scan: [cumsum_scan](../cumsum_scan/README.md).
+- Pre-step: [causal_conv1d](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/causal_conv1d/README.md) · norm: [rmsnorm](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/rmsnorm/README.md) (L2-norm variant) · scan: [cumsum_scan](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/cumsum_scan/README.md).
 - Interleaved full-attn: [attention_prefill_fmha](../attention_prefill_fmha/README.md) · [gqa_mqa_attention](../gqa_mqa_attention/README.md).
 - Languages: `triton_amd` (the path) · backend: `aiter` · `sglang_kernels`.
 

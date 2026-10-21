@@ -1,13 +1,16 @@
 # gemm_epilogue_fused
 
-1 current AITER implementation references; 0 historical experience cards.
+GEMM with activation, residual, normalization/quantization and communication boundaries.
+
+2 AITER implementation references; 3 historical experience cards.
 
 ## AITER implementations
 
-Source snapshot: `e9995854abbd`. These pages describe source and validation routes; they do not imply that every implementation has been benchmarked on every GPU.
+Each page pins its source revision. Source references describe implementations and validation routes; they do not establish a measured performance ranking.
 
 | Backend / provider entry | Reference |
 | --- | --- |
+| aiter | [GEMM fusion boundaries in AITER](backend/aiter_aiter.md) |
 | triton | [Gemm epilogue fused — AITER triton](backend/triton_aiter.md) |
 
 ## Optimization experience
@@ -16,7 +19,7 @@ Source snapshot: `e9995854abbd`. These pages describe source and validation rout
 
 ## GEAK reference material
 
-The material below is imported from GEAK. Its backend status and performance statements belong to the original source dates. Use the AITER pages above for the current source snapshot.
+The material below is imported from GEAK. Its backend status and performance statements belong to the original source dates. Use the pinned AITER references where available to check current applicability.
 
 <details>
 <summary>Original GEAK metadata</summary>
@@ -76,9 +79,9 @@ non-trivial.
 
 ## Fusion neighbors
 This *is* the fusion operator. Producer-side: norm+quant before the GEMM
-([operators/fused_norm_quant/overview.md](../fused_norm_quant/README.md)); activation op
-([operators/act_and_mul_silu_gelu/overview.md](../act_and_mul_silu_gelu/README.md)); output quant
-([operators/scaled_quant_gemm/overview.md](../scaled_quant_gemm/README.md), [operators/quant_dequant_fp8/overview.md](../quant_dequant_fp8/README.md)). See
+([operators/fused_norm_quant/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/fused_norm_quant/README.md)); activation op
+([operators/act_and_mul_silu_gelu/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/act_and_mul_silu_gelu/README.md)); output quant
+([operators/scaled_quant_gemm/overview.md](../scaled_quant_gemm/README.md), [operators/quant_dequant_fp8/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_dequant_fp8/README.md)). See
 [fusion.md](fusion.md).
 
 ## Numerics

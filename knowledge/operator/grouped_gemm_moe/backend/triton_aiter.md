@@ -18,6 +18,8 @@ Follow the public Python wrapper into the launchable Triton function. Tune only 
 
 ## Scope and evidence
 
+This page selects LLM inference paths. Shared upstream files and test suites can also contain training code; use their forward cases with gradients and dropout disabled. Explicit gradient-only implementations, tests and configurations are omitted.
+
 The source links below are pinned to AITER `e9995854abbd`. **Recent** means the file changed between 2026-07-21 and this snapshot. The symbol lists and parameter names are extracted from source; they include helpers as well as entry points. They do not certify runtime dispatch, hardware support or a measured speedup.
 
 ## Implementation files and entry points
@@ -102,16 +104,6 @@ Symbols: [`moe_situ_epilogue`](https://github.com/ROCm/aiter/blob/e9995854abbd93
 
 Parameters referenced in this file: `num_warps`.
 
-### `aiter/ops/triton/moe/moe_wgrad.py`
-
-[Source](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/moe_wgrad.py) · **Recent**
-
-Source documentation: MoE weight-gradient wrapper (group_sizes interface).
-
-Symbols: [`moe_wgrad`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/moe_wgrad.py#L15).
-
-Parameters referenced in this file: `BLOCK_SIZE_K`, `BLOCK_SIZE_M`, `BLOCK_SIZE_N`.
-
 ### `aiter/ops/triton/moe/quant_moe.py`
 
 [Source](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/quant_moe.py) · **Recent**
@@ -138,7 +130,7 @@ Parameters referenced in this file: `BLOCK_N`, `num_warps`, `split_k`.
 
 Source documentation: Run grouped GEMM, optionally with 1x128 activation and 128x128 weight scales.
 
-Symbols: [`_local_tensor`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L56), [`_use_qwen3_tuned_configs`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L62), [`grouped_gemm`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L66), [`_grouped_gemm_triton`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L120), [`_grouped_gemm_dw`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L219), [`token_gather_and_sum_varlen_K_triton`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L319), [`_launch_config`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L351), [`activation_fwd`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L361), [`activation_bwd`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L405), [`TC_topk_router_metadata_triton`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L469), [`general_routing_router_metadata_triton`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L541), [`_router_forward`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L612), [`_topk_softmax_fwd`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L639), [`_topk_softmax_bwd`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L666), [`_up_projection_backward_act`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L728), [`_down_projection_backward_act`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L773), [`_token_broadcast_backward`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L863), [`ActivationType`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L887), [`is_glu`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L897), [`TC_Softmax_Topk_Router_Function`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L919), [`_UpProjection`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L981), [`_DownProjection`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L1131), [`moe_TC_softmax_topk_layer`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L1270), [`moe_general_routing_inputs`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L1363), [`moe_pre_routed_inputs`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L1474).
+Symbols: [`_local_tensor`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L56), [`_use_qwen3_tuned_configs`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L62), [`grouped_gemm`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L66), [`_grouped_gemm_triton`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L120), [`token_gather_and_sum_varlen_K_triton`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L319), [`_launch_config`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L351), [`activation_fwd`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L361), [`TC_topk_router_metadata_triton`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L469), [`general_routing_router_metadata_triton`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L541), [`_router_forward`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L612), [`_topk_softmax_fwd`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L639), [`ActivationType`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L887), [`is_glu`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L897), [`TC_Softmax_Topk_Router_Function`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L919), [`_UpProjection`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L981), [`_DownProjection`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L1131), [`moe_TC_softmax_topk_layer`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L1270), [`moe_general_routing_inputs`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L1363), [`moe_pre_routed_inputs`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/moe/sonicmoe.py#L1474).
 
 Parameters referenced in this file: `BLOCK_H`, `BLOCK_H_MAX`, `BLOCK_I`, `BLOCK_I_MAX`, `BLOCK_K`, `BLOCK_M`, `BLOCK_N`, `BLOCK_SIZE`.
 
@@ -162,7 +154,7 @@ Parameters referenced in this file: `BLOCK_SIZE_G`, `BLOCK_SIZE_K`, `BLOCK_SIZE_
 
 [Source](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/activations.py) · **Recent**
 
-Symbols: [`clip`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/activations.py#L23), [`_swiglu`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/activations.py#L41), [`silu`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/activations.py#L63), [`silu_grad`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/activations.py#L68), [`gelu_tanh`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/activations.py#L74), [`gelu_tanh_grad`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/activations.py#L82), [`relu`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/activations.py#L95), [`relu_grad`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/activations.py#L100), [`relu_sq`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/activations.py#L105), [`relu_sq_grad`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/activations.py#L111), [`_glu_fwd_kernel`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/activations.py#L130), [`_glu_bwd_kernel`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/activations.py#L192), [`_pointwise_act_fwd_kernel`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/activations.py#L272), [`_pointwise_act_bwd_kernel`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/activations.py#L319).
+Symbols: [`clip`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/activations.py#L23), [`_swiglu`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/activations.py#L41), [`silu`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/activations.py#L63), [`silu_grad`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/activations.py#L68), [`gelu_tanh`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/activations.py#L74), [`gelu_tanh_grad`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/activations.py#L82), [`relu`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/activations.py#L95), [`relu_grad`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/activations.py#L100), [`relu_sq`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/activations.py#L105), [`relu_sq_grad`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/activations.py#L111), [`_glu_fwd_kernel`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/activations.py#L130), [`_pointwise_act_fwd_kernel`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/activations.py#L272).
 
 Parameters referenced in this file: `BLOCK_I`, `BLOCK_M`.
 
@@ -232,16 +224,6 @@ Source documentation: Triton kernel for a merged MoE SiTU epilogue.
 
 Symbols: [`_moe_situ_epilogue_kernel`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/moe_situ_epilogue.py#L28).
 
-### `aiter/ops/triton/_triton_kernels/moe/moe_wgrad.py`
-
-[Source](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/moe_wgrad.py) · **Recent**
-
-Source documentation: Triton kernel for MoE weight-gradient computation. Computes dW[e] = sum_{tokens t assigned to expert e} grad[t].T @ input[t] using sorted token infrastructure from moe_align_block_size.
-
-Symbols: [`_get_autotune_configs`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/moe_wgrad.py#L20), [`_moe_wgrad_kernel`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/moe_wgrad.py#L77).
-
-Parameters referenced in this file: `BLOCK_K`, `BLOCK_M`, `BLOCK_N`, `BLOCK_SIZE_K`, `BLOCK_SIZE_M`, `BLOCK_SIZE_N`, `num_stages`, `num_warps`.
-
 ### `aiter/ops/triton/_triton_kernels/moe/quant_moe.py`
 
 [Source](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/quant_moe.py) · **Recent**
@@ -258,19 +240,11 @@ Symbols: [`_scatter_grouped`](https://github.com/ROCm/aiter/blob/e9995854abbd935
 
 Parameters referenced in this file: `BLOCK_N`, `BLOCK_N_OUT`, `split_k`.
 
-### `aiter/ops/triton/_triton_kernels/moe/sonicmoe/backward.py`
-
-[Source](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/sonicmoe/backward.py) · **Recent**
-
-Symbols: [`db2_and_ds_kernel`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/sonicmoe/backward.py#L19), [`db1_kernel`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/sonicmoe/backward.py#L98).
-
-Parameters referenced in this file: `BLOCK_H`, `BLOCK_I`, `BLOCK_OLD_DS_PARTIAL_N`, `BLOCK_TK`.
-
 ### `aiter/ops/triton/_triton_kernels/moe/sonicmoe/grouped_gemm.py`
 
 [Source](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/sonicmoe/grouped_gemm.py) · **Recent**
 
-Symbols: [`_grouped_gemm_kernel`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/sonicmoe/grouped_gemm.py#L43), [`_grouped_gemm_dw_kernel`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/sonicmoe/grouped_gemm.py#L206).
+Symbols: [`_grouped_gemm_kernel`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/sonicmoe/grouped_gemm.py#L43).
 
 Parameters referenced in this file: `BLOCK_K`, `BLOCK_M`, `BLOCK_N`, `BLOCK_T`.
 
@@ -306,7 +280,6 @@ Related tests for this operator family are listed below. Select the entry point 
 - [op_tests/op_benchmarks/triton/bench_moe_gemm_a8w8_blockscale.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/op_benchmarks/triton/bench_moe_gemm_a8w8_blockscale.py)
 - [op_tests/op_benchmarks/triton/bench_moe_gemm_int8_smoothquant.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/op_benchmarks/triton/bench_moe_gemm_int8_smoothquant.py)
 - [op_tests/op_benchmarks/triton/bench_moe_situ_epilogue.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/op_benchmarks/triton/bench_moe_situ_epilogue.py)
-- [op_tests/op_benchmarks/triton/bench_moe_wgrad.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/op_benchmarks/triton/bench_moe_wgrad.py)
 - [op_tests/op_benchmarks/triton/bench_sonicmoe.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/op_benchmarks/triton/bench_sonicmoe.py)
 - [op_tests/triton_tests/moe/__init__.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/triton_tests/moe/__init__.py)
 - [op_tests/triton_tests/moe/moe_test_utils.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/triton_tests/moe/moe_test_utils.py)
@@ -317,7 +290,6 @@ Related tests for this operator family are listed below. Select the entry point 
 - [op_tests/triton_tests/moe/test_moe_gemm_a8w8_blockscale.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/triton_tests/moe/test_moe_gemm_a8w8_blockscale.py)
 - [op_tests/triton_tests/moe/test_moe_gemm_int8_smoothquant.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/triton_tests/moe/test_moe_gemm_int8_smoothquant.py)
 - [op_tests/triton_tests/moe/test_moe_situ_epilogue.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/triton_tests/moe/test_moe_situ_epilogue.py)
-- [op_tests/triton_tests/moe/test_moe_wgrad.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/triton_tests/moe/test_moe_wgrad.py)
 - [op_tests/triton_tests/moe/test_quant_moe.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/triton_tests/moe/test_quant_moe.py)
 - [op_tests/triton_tests/moe/test_sonicmoe.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/triton_tests/moe/test_sonicmoe.py)
 - [op_tests/flydsl_tests/test_flydsl_grouped_gemm.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/flydsl_tests/test_flydsl_grouped_gemm.py)

@@ -1,10 +1,12 @@
 # dense_gemm
 
-8 current AITER implementation references; 16 historical experience cards.
+Dense attention and FFN projections; prefill versus decode tiling.
+
+8 AITER implementation references; 16 historical experience cards.
 
 ## AITER implementations
 
-Source snapshot: `e9995854abbd`. These pages describe source and validation routes; they do not imply that every implementation has been benchmarked on every GPU.
+Each page pins its source revision. Source references describe implementations and validation routes; they do not establish a measured performance ranking.
 
 | Backend / provider entry | Reference |
 | --- | --- |
@@ -17,7 +19,7 @@ Source snapshot: `e9995854abbd`. These pages describe source and validation rout
 | opus | [Dense matrix multiplication — AITER opus](backend/opus_aiter.md) |
 | triton | [Dense matrix multiplication — AITER triton](backend/triton_aiter.md) |
 
-## Implementation notes
+### Implementation notes
 
 - [AITER FlyDSL A16W16: useful tiles and occupancy-aware policy](backend/flydsl_notes.md)
 - [AITER OPUS: exact kernel ids and shape-driven dispatch](backend/opus_notes.md)
@@ -28,7 +30,7 @@ Source snapshot: `e9995854abbd`. These pages describe source and validation rout
 
 ## GEAK reference material
 
-The material below is imported from GEAK. Its backend status and performance statements belong to the original source dates. Use the AITER pages above for the current source snapshot.
+The material below is imported from GEAK. Its backend status and performance statements belong to the original source dates. Use the pinned AITER references where available to check current applicability.
 
 <details>
 <summary>Original GEAK metadata</summary>

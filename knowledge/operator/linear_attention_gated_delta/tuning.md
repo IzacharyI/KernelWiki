@@ -42,7 +42,7 @@ The prefill is several fused Triton kernels (on-box): `chunk.py`, `chunk_o.py`, 
 ## Causal conv1d pre-step
 GDN applies a short causal conv1d on Q/K/V before the scan. FLA provides Triton conv1d (so
 `causal-conv1d` C++ lib is not required). Fuse the conv with the QKV split (`fused_qkvzba_split.py`,
-`causal_conv1d_split_qkv.py`) to avoid an HBM round-trip. See [causal_conv1d](../causal_conv1d/README.md).
+`causal_conv1d_split_qkv.py`) to avoid an HBM round-trip. See [causal_conv1d](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/causal_conv1d/README.md).
 
 ## Autotune sketch
 Prefill: key on `(seq, head_dim_k, head_dim_v, chunk)`; sweep `chunk∈{32,64,128}`, `num_warps∈{4,8}`,

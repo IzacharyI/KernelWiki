@@ -40,7 +40,7 @@ Open the resulting `*.pftrace` / `proto` in **ui.perfetto.dev**. (rocprof-sys bi
    bar where the CPU sits idle waiting for the GPU (or vice versa). Remove unnecessary syncs; overlap
    copies on a separate stream; avoid per-step `.item()`/`.cpu()` in the hot loop.
 4. **Comm stalls (multi-GPU).** RCCL/MPI bars where compute waits on a collective → overlap or fuse
-   (e.g. [`../operators/fused_allreduce_rmsnorm/overview.md`](../../operator/fused_allreduce_rmsnorm/README.md)).
+   (e.g. [`../operators/fused_allreduce_rmsnorm/overview.md`](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/fused_allreduce_rmsnorm/README.md)).
 
 ## HIP API trace specifics
 The HIP API lane shows each runtime call with duration. Use it to attribute gaps: a 200 µs gap aligned

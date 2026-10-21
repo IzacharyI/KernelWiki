@@ -19,7 +19,7 @@ sources:
 > **isolated kernel gate** (round-trip max-rel-error + `err_ratio < 0.05`, the aiter convention) and the
 > **decisive e2e gate** (task accuracy: MMLU / GSM8K / perplexity within a band, plus tok/s up).
 > Bit-exact parity only applies to *lossless* swaps (bf16↔bf16 library substitution). Element-level
-> gating detail: [operators/quant_dequant_fp8](../../operator/quant_dequant_fp8/README.md), [operators/quant_fp4_mxfp](../../operator/quant_fp4_mxfp/README.md).
+> gating detail: [operators/quant_dequant_fp8](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_dequant_fp8/README.md), [operators/quant_fp4_mxfp](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_fp4_mxfp/README.md).
 
 ## The two-tier gate
 1. **Isolated (kernel/op) gate** — for a quant or quantized-GEMM kernel in isolation:
@@ -33,7 +33,7 @@ sources:
      same seed / temp=0;
    - require the task metric within a band **and** tok/s improved. A reasonable band: GSM8K/MMLU drop
      **< ~0.5–1 pt** for FP8; budget a **larger band for MXFP4** (most aggressive) and prefer
-     MXFP6/mixed if it fails ([block_scaling_mxfp.md](block_scaling_mxfp.md), [operators/quant_fp4_mxfp](../../operator/quant_fp4_mxfp/README.md)).
+     MXFP6/mixed if it fails ([block_scaling_mxfp.md](block_scaling_mxfp.md), [operators/quant_fp4_mxfp](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_fp4_mxfp/README.md)).
 
 ## Why byte parity is wrong as a gate
 | swap | lossy? | correct gate |
@@ -51,7 +51,7 @@ Any FP8/FP6/FP4/INT path changes bits *by design*; demanding parity would reject
 - CDNA3's MFMA conversion uses an asymmetric **round-down** mode for FP16/BF16 that injects a small
   systematic bias on long-K reductions; the FP8 path was specifically adjusted to mitigate it (MMA-Sim,
   arXiv 2511.10909). Practical default: **RNE + per-token scaling**; reach for SR only when *measured*
-  accumulation bias matters. Detail: [operators/quant_dequant_fp8](../../operator/quant_dequant_fp8/README.md).
+  accumulation bias matters. Detail: [operators/quant_dequant_fp8](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_dequant_fp8/README.md).
 
 ## What to measure, concretely
 - **Per-element / per-block round-trip error** (isolated): max-rel-error + err_ratio vs fp32.
@@ -66,7 +66,7 @@ Any FP8/FP6/FP4/INT path changes bits *by design*; demanding parity would reject
 ## MMA-Sim / bit-accurate references
 For isolating *where* error comes from (cast vs accumulate vs rounding mode), a bit-accurate matrix-core
 simulator (MMA-Sim) reproduces CDNA3 MFMA rounding exactly — useful to separate kernel bugs from
-inherent quant loss. See [operators/quant_dequant_fp8](../../operator/quant_dequant_fp8/README.md).
+inherent quant loss. See [operators/quant_dequant_fp8](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_dequant_fp8/README.md).
 
 ## Pitfalls
 - **Gating FP8/MXFP on byte parity** — guarantees a false failure.
@@ -74,7 +74,7 @@ inherent quant loss. See [operators/quant_dequant_fp8](../../operator/quant_dequ
 - **Changing seed/temp between runs** — confounds the accuracy delta.
 - **One task only** — MMLU can pass while reasoning (GSM8K) regresses; use a small suite.
 - **Ignoring accumulation bias on long K** — RNE round-down can drift; SR or higher-precision accum
-  ([operators/quant_dequant_fp8](../../operator/quant_dequant_fp8/README.md)).
+  ([operators/quant_dequant_fp8](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_dequant_fp8/README.md)).
 
 ## Verify
 - Isolated: `checkAllclose(out, ref, tol_err_ratio=0.05)` on a representative input.
@@ -85,7 +85,7 @@ inherent quant loss. See [operators/quant_dequant_fp8](../../operator/quant_dequ
 - CDNA3 round-down rounding, FP8 adjustment, SR context (MMA-Sim): https://arxiv.org/html/2511.10909v1
 - ROCm quantization accuracy guidance: https://rocm.docs.amd.com/en/latest/how-to/rocm-for-ai/inference-optimization/model-quantization.html
 - MX paper (low-bit accuracy basis): https://arxiv.org/pdf/2310.10537
-- err_ratio<0.05 convention: [operators/quant_dequant_fp8](../../operator/quant_dequant_fp8/README.md) (`aiter/test_common.py:400`, `gradlib/gradlib/GemmTuner.py`).
+- err_ratio<0.05 convention: [operators/quant_dequant_fp8](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_dequant_fp8/README.md) (`aiter/test_common.py:400`, `gradlib/gradlib/GemmTuner.py`).
 
 ## Migration provenance
 

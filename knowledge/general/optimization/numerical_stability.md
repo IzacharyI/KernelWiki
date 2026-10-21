@@ -29,18 +29,18 @@ against an fp32 reference (`err_ratio < 0.05` for GEMM tuning,
   down-cast the accumulator inside the K-loop (`[optimization/mfma_scheduling.md](mfma_scheduling.md)`). Cast to the
   output dtype only in the epilogue.
 - Long reductions (softmax denom, norm sum, logsumexp) accumulate in fp32 regardless of I/O dtype;
-  bf16 accumulation of a long sum loses bits fast (`[operators/reduction/overview.md](../../operator/reduction/README.md)`).
+  bf16 accumulation of a long sum loses bits fast (`[operators/reduction/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/reduction/README.md)`).
 
 ### Online softmax (attention)
 - Stream K-blocks keeping running `m` (max) and `l` (denom); rescale the partial output by
   `exp(m_old − m_new)` per block. Avoids overflow from `exp(large)` and needs no second pass — the basis
   of flash-style attention (``operators/attention_prefill_fmha.md``,
-  ``operators/attention_decode_paged.md``, `[operators/softmax/overview.md](../../operator/softmax/README.md)`).
+  ``operators/attention_decode_paged.md``, `[operators/softmax/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/softmax/README.md)`).
 
 ### Welford (norms)
 - Single-pass mean/variance with a numerically stable running update (vs the catastrophic-cancellation
   `E[x²]−E[x]²`). Use for RMSNorm/LayerNorm, fp32 accumulators
-  (`[operators/rmsnorm/overview.md](../../operator/rmsnorm/README.md)`, `[operators/layernorm/overview.md](../../operator/layernorm/README.md)`).
+  (`[operators/rmsnorm/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/rmsnorm/README.md)`, `[operators/layernorm/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/layernorm/README.md)`).
 
 ## The fp8 format trap (FNUZ vs OCP)
 | | CDNA3 (MI300X) | CDNA4 (MI350X) |
@@ -52,12 +52,12 @@ against an fp32 reference (`err_ratio < 0.05` for GEMM tuning,
 - Pick the dtype id explicitly in frontmatter and code; never assume "fp8 is fp8" across gens.
 - CDNA4 adds **microscaled MX (fp8/fp6/fp4)** with per-block scales — the scale granularity is part of
   numeric correctness (`[hardware/cdna4_mi350/fp4_fp6_microscaling.md](../hardware/cdna4_mi350/fp4_fp6_microscaling.md)`,
-  `[operators/quant_fp4_mxfp/overview.md](../../operator/quant_fp4_mxfp/README.md)`).
+  `[operators/quant_fp4_mxfp/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_fp4_mxfp/README.md)`).
 
 ## Scaling (quantization hygiene)
 - **Per-tensor / per-channel / per-block** scales: choose the finest the kernel can afford; compute
   `amax` in fp32, derive scale, clamp to the format max before cast
-  (`[operators/scaled_quant_gemm/overview.md](../../operator/scaled_quant_gemm/README.md)`, `[operators/quant_dequant_fp8/overview.md](../../operator/quant_dequant_fp8/README.md)`).
+  (`[operators/scaled_quant_gemm/overview.md](../../operator/scaled_quant_gemm/README.md)`, `[operators/quant_dequant_fp8/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_dequant_fp8/README.md)`).
 - Fuse `amax`+quant into the producing pass to avoid an extra read
   (`[optimization/kernel_fusion_strategy.md](kernel_fusion_strategy.md)`), but keep the `amax` reduction in fp32.
 - For dynamic activations, recompute scale per tensor per step; for static, calibrate offline.

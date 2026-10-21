@@ -57,7 +57,7 @@ autotuned config; re-measure on your stack.
 
 ## Alternatives / cross-links
 [overview.md](../README.md) · [triton.md](triton.md) · [hip.md](hip.md) · languages: [tilelang](tilelang.md) ·
-`triton_amd` · ops: [causal_conv1d](../../causal_conv1d/README.md) · [cumsum_scan](../../cumsum_scan/README.md).
+`triton_amd` · ops: [causal_conv1d](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/causal_conv1d/README.md) · [cumsum_scan](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/cumsum_scan/README.md).
 
 ## Sources
 - tile-ai/tilelang (linear-attention / chunk-scan examples): https://github.com/tile-ai/tilelang

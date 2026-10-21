@@ -18,6 +18,8 @@ Follow the public Python wrapper into the launchable Triton function. Tune only 
 
 ## Scope and evidence
 
+This page selects LLM inference paths. Shared upstream files and test suites can also contain training code; use their forward cases with gradients and dropout disabled. Explicit gradient-only implementations, tests and configurations are omitted.
+
 The source links below are pinned to AITER `e9995854abbd`. **Recent** means the file changed between 2026-07-21 and this snapshot. The symbol lists and parameter names are extracted from source; they include helpers as well as entry points. They do not certify runtime dispatch, hardware support or a measured speedup.
 
 ## Implementation files and entry points
@@ -161,14 +163,6 @@ Parameters referenced in this file: `BLOCK_N`.
 Source documentation: Add packed [16-bit key \| 16-bit count] values by equal-key runs.
 
 Symbols: [`keyed_add`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/moe_routing/utils.py#L13).
-
-### `aiter/ops/triton/_triton_kernels/moe/sonicmoe/topk_softmax.py`
-
-[Source](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/sonicmoe/topk_softmax.py) · **Recent**
-
-Symbols: [`_softmax_over_topk_bwd_kernel`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/sonicmoe/topk_softmax.py#L20), [`_topk_over_softmax_bwd_kernel`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/moe/sonicmoe/topk_softmax.py#L62).
-
-Parameters referenced in this file: `BLOCK_E`, `BLOCK_K`.
 
 ## Tests and benchmarks
 

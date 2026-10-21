@@ -1,10 +1,12 @@
 # attention_decode_paged
 
-5 current AITER implementation references; 35 historical experience cards.
+Decode attention over paged KV caches, split/reduce and mixed precision.
+
+5 AITER implementation references; 35 historical experience cards.
 
 ## AITER implementations
 
-Source snapshot: `e9995854abbd`. These pages describe source and validation routes; they do not imply that every implementation has been benchmarked on every GPU.
+Each page pins its source revision. Source references describe implementations and validation routes; they do not establish a measured performance ranking.
 
 | Backend / provider entry | Reference |
 | --- | --- |
@@ -14,13 +16,17 @@ Source snapshot: `e9995854abbd`. These pages describe source and validation rout
 | hip | [Paged and unified attention decode — AITER hip](backend/hip_aiter.md) |
 | triton | [Paged and unified attention decode — AITER triton](backend/triton_aiter.md) |
 
+### Implementation notes
+
+- [KV-cache preparation belongs to the attention workload](backend/aiter_notes.md)
+
 ## Optimization experience
 
 [Learned knowledge](learned_knowledge/README.md) — applicability, outcomes and original evidence.
 
 ## GEAK reference material
 
-The material below is imported from GEAK. Its backend status and performance statements belong to the original source dates. Use the AITER pages above for the current source snapshot.
+The material below is imported from GEAK. Its backend status and performance statements belong to the original source dates. Use the pinned AITER references where available to check current applicability.
 
 <details>
 <summary>Original GEAK metadata</summary>

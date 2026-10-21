@@ -1,10 +1,12 @@
 # grouped_gemm_moe
 
-8 current AITER implementation references; 37 historical experience cards.
+Expert grouped GEMMs, token imbalance and low-bit expert weights.
+
+8 AITER implementation references; 37 historical experience cards.
 
 ## AITER implementations
 
-Source snapshot: `e9995854abbd`. These pages describe source and validation routes; they do not imply that every implementation has been benchmarked on every GPU.
+Each page pins its source revision. Source references describe implementations and validation routes; they do not establish a measured performance ranking.
 
 | Backend / provider entry | Reference |
 | --- | --- |
@@ -17,7 +19,7 @@ Source snapshot: `e9995854abbd`. These pages describe source and validation rout
 | opus | [Grouped GEMM and MoE expert computation — AITER opus](backend/opus_aiter.md) |
 | triton | [Grouped GEMM and MoE expert computation — AITER triton](backend/triton_aiter.md) |
 
-## Implementation notes
+### Implementation notes
 
 - [AITER FlyDSL MoE: requested tiles versus executed tiles](backend/flydsl_notes.md)
 
@@ -27,7 +29,7 @@ Source snapshot: `e9995854abbd`. These pages describe source and validation rout
 
 ## GEAK reference material
 
-The material below is imported from GEAK. Its backend status and performance statements belong to the original source dates. Use the AITER pages above for the current source snapshot.
+The material below is imported from GEAK. Its backend status and performance statements belong to the original source dates. Use the pinned AITER references where available to check current applicability.
 
 <details>
 <summary>Original GEAK metadata</summary>
@@ -59,7 +61,7 @@ sources:
   tokens routed to `e`. Equivalent to a block-diagonal GEMM with per-group `M_e` and shared `N,K`.
 - MoE FFN uses two grouped GEMMs: gate/up `(K=hidden, N=2*inter)` then down `(K=inter, N=hidden)`,
   with an act-and-mul (silu/gelu) between → see [fusion.md](fusion.md) and
-  [../act_and_mul_silu_gelu/overview.md](../act_and_mul_silu_gelu/README.md).
+  [../act_and_mul_silu_gelu/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/act_and_mul_silu_gelu/README.md).
 - Inputs are pre-sorted by expert and padded so each group's M aligns to the tile (MoE align & sort);
   an `expert_ids`/`num_tokens_post_pad` offset table drives tile→group mapping.
 - dtype: bf16/fp16 weights, or fp8/fp4 block-scaled (→ [../scaled_quant_gemm/overview.md](../scaled_quant_gemm/README.md)).

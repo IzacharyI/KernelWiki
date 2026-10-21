@@ -61,7 +61,7 @@ Prefill time ~O(T/C), decode ~O(T); state parity vs FLA fp32 reference; greedy t
 
 ## Alternatives / cross-links
 [overview.md](../README.md) · [hip.md](hip.md) · [tilelang.md](tilelang.md) · languages: `triton_amd` ·
-ops: [causal_conv1d](../../causal_conv1d/README.md) · [cumsum_scan](../../cumsum_scan/README.md) · backend: `aiter` · `sglang_kernels`.
+ops: [causal_conv1d](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/causal_conv1d/README.md) · [cumsum_scan](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/cumsum_scan/README.md) · backend: `aiter` · `sglang_kernels`.
 
 ## Sources
 - aiter GDN kernels: `ROCm/aiter@a6bb49937:aiter/ops/triton/gated_delta_net/`, `_triton_kernels/gated_delta_rule/` (on-box).

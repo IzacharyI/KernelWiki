@@ -67,7 +67,7 @@ Candidate backends by family (see [`choosing_a_backend.md`](choosing_a_backend.m
 - **decode attention / MLA** → `aiter (asm decode), triton, ck`
   ([`operators/mla_attention/`](../../operator/mla_attention/README.md), [`operators/attention_decode_paged/`](../../operator/attention_decode_paged/README.md))
 - **editable custom (norms/rope/act/gated-delta)** → `triton` first
-  ([`operators/rmsnorm/`](../../operator/rmsnorm/README.md), [`operators/rope/`](../../operator/rope/README.md),
+  ([`operators/rmsnorm/`](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/rmsnorm/README.md), [`operators/rope/`](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/rope/README.md),
   [`operators/linear_attention_gated_delta/`](../../operator/linear_attention_gated_delta/README.md))
 
 Set **`best_known_ms`** = fastest correct backend's ms. This is the bar any authored

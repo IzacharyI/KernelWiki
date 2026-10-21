@@ -20,7 +20,7 @@ sources:
 > can hold** for ~free. On ROCm the KV format is **FP8 E4M3** (`--kv-cache-dtype fp8`, ROCm 6.2+);
 > INT8 KV also exists. Scales can be per-tensor or **per-head**; the cache is stored in **paged** blocks
 > and often **shuffled** for the attention kernel's layout. Kernel-level detail:
-> [operators/kv_cache_quant](../../operator/kv_cache_quant/README.md), [operators/paged_kv_copy](../../operator/paged_kv_copy/README.md), [operators/attention_decode_paged](../../operator/attention_decode_paged/README.md).
+> [operators/kv_cache_quant](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/kv_cache_quant/README.md), [operators/paged_kv_copy](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/paged_kv_copy/README.md), [operators/attention_decode_paged](../../operator/attention_decode_paged/README.md).
 
 ## Why KV cache is its own problem
 - KV memory = `2 · layers · heads · head_dim · seq · batch · bytes`. At long context it dominates HBM and
@@ -53,11 +53,11 @@ caching) — **not** an Instinct issue, but a portability caveat.
 ## Paged & shuffled layout
 - The KV cache is stored in **paged blocks** (PagedAttention): fixed-size blocks indexed by a block
   table, not one contiguous tensor. The quantized cache keeps the same paging; quant scales live
-  alongside the blocks ([operators/paged_kv_copy](../../operator/paged_kv_copy/README.md)).
+  alongside the blocks ([operators/paged_kv_copy](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/paged_kv_copy/README.md)).
 - **Shuffled KV cache**: ROCm/AITER reorders the paged FP8 KV layout to match the attention kernel's
   access pattern (asm Paged Attention), which is part of the "optimized KV cache + assembly Paged
   Attention" throughput work. Wrong layout = correctness/perf loss — treat like the MXFP scale shuffle
-  ([block_scaling_mxfp.md](block_scaling_mxfp.md), [operators/layout_shuffle](../../operator/layout_shuffle/README.md)).
+  ([block_scaling_mxfp.md](block_scaling_mxfp.md), [operators/layout_shuffle](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/layout_shuffle/README.md)).
 
 ## How to enable (serving)
 - vLLM: `vllm serve <model> --kv-cache-dtype fp8` (dynamic), or load a Quark `*-FP8-KV` checkpoint:

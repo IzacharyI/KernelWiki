@@ -19,7 +19,7 @@ sources:
 > **CDNA3 / gfx942 (MI300/MI325) = FNUZ** (bias 8 for E4M3); **CDNA4 / gfx950 (MI350/MI355) = OCP**
 > (bias 7, the H100/Blackwell-standard E4M3FN). Bit-copy a checkpoint across the split and every value
 > is **off by exactly a factor of 2 — silently**. Match the dialect to the arch; re-cast, never bit-copy.
-> Element-level numerics: [operators/quant_dequant_fp8](../../operator/quant_dequant_fp8/README.md). HW rates: [hardware_support_matrix.md](hardware_support_matrix.md).
+> Element-level numerics: [operators/quant_dequant_fp8](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_dequant_fp8/README.md). HW rates: [hardware_support_matrix.md](hardware_support_matrix.md).
 
 ## The two dialects
 | | CDNA3 (gfx942, MI300/MI325) | CDNA4 (gfx950, MI350/MI355) |
@@ -56,7 +56,7 @@ When quantization scales are attached (QDQ graphs), the documented adjustment is
 by 2 on QuantizeLinear and divide by 2 on DeQuantizeLinear** to absorb the bias shift. Range
 consequence: OCP's ±448 max maps to **±224** under FNUZ (it never reaches the FNUZ ±240) — generally
 acceptable per AMD's framework experiments, and it dovetails with the **224.0 ROCm dynamic cap**
-([scaling_strategies.md](scaling_strategies.md), [operators/quant_dequant_fp8](../../operator/quant_dequant_fp8/README.md)).
+([scaling_strategies.md](scaling_strategies.md), [operators/quant_dequant_fp8](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_dequant_fp8/README.md)).
 
 ## Doing it right in code (arch-gated dialect selection)
 - HIP selects the dialect by arch string: code checks for `gfx94*` and picks `__HIP_E4M3_FNUZ`,
@@ -66,7 +66,7 @@ acceptable per AMD's framework experiments, and it dovetails with the **224.0 RO
   - CDNA3: `__hip_fp8_*` (`hip_fp8.h`) — FNUZ.
   - gfx950: `__amd_fp8_*` / OCP path — and CDNA4's HIP FP8 extensions map ~1:1 to hardware instructions.
 - vLLM on ROCm pins `FP8_TYPE = c10::Float8_e4m3fnuz` for the CDNA3 path
-  (`csrc/quantization/fp8/common.cu`) — see [operators/quant_dequant_fp8](../../operator/quant_dequant_fp8/README.md).
+  (`csrc/quantization/fp8/common.cu`) — see [operators/quant_dequant_fp8](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_dequant_fp8/README.md).
 
 ## What this means for checkpoints & portability
 - An **OCP FP8 checkpoint** (the de-facto standard, shared with NVIDIA H100) reads **incorrectly on
@@ -88,14 +88,14 @@ acceptable per AMD's framework experiments, and it dovetails with the **224.0 RO
 - Round-trip a known tensor through the *target-arch* cast and compare to fp32 reference; a clean
   factor-of-2 error in the histogram is the dialect-mismatch signature.
 - Confirm the saturation point: ±240 (FNUZ) vs ±448 (OCP). MMA-Sim is bit-accurate
-  ([operators/quant_dequant_fp8](../../operator/quant_dequant_fp8/README.md)).
+  ([operators/quant_dequant_fp8](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_dequant_fp8/README.md)).
 
 ## Sources
 - HIP FP8 numbers, FNUZ definition, arch-gated `__HIP_E4M3_FNUZ` vs OCP: https://rocm.docs.amd.com/projects/HIP/en/latest/reference/fp8_numbers.html
 - CDNA3 vs CDNA4 dialect, block-scaled MFMA type codes: https://rocm.blogs.amd.com/software-tools-optimization/matrix-cores-cdna/README.html
 - The 2× trap on MI300X (vLLM unaware of FNUZ vs OCP): https://fergusfinn.com/blog/deepseek-v4-flash-mi300x/
 - OCP→FNUZ conversion rules, scale ×2/÷2, 448→224: https://github.com/ROCm/AMDMIGraphX/issues/2717
-- Element numerics & 224 cap: [operators/quant_dequant_fp8](../../operator/quant_dequant_fp8/README.md) (`vllm@HEAD:csrc/quantization/fp8/common.cu`).
+- Element numerics & 224 cap: [operators/quant_dequant_fp8](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_dequant_fp8/README.md) (`vllm@HEAD:csrc/quantization/fp8/common.cu`).
 
 ## Migration provenance
 

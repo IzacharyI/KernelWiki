@@ -113,7 +113,7 @@ from aiter.ops.flydsl import flydsl_moe_stage1, flydsl_moe_stage2
 [operators/grouped_gemm_moe/backends/aiter](aiter.md) (DB-driven dispatch) ·
 [operators/grouped_gemm_moe/backends/ck](ck.md) · [operators/grouped_gemm_moe/backends/triton](triton.md) ·
 [operators/dense_gemm/backends/flydsl](../../dense_gemm/backend/flydsl.md) (the dense FlyDSL hgemm) ·
-[operators/act_and_mul_silu_gelu/backends/flydsl](../../act_and_mul_silu_gelu/backend/flydsl.md) (fused split-K post-activation).
+[operators/act_and_mul_silu_gelu/backends/flydsl](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/act_and_mul_silu_gelu/backend/flydsl.md) (fused split-K post-activation).
 
 ## Sources
 - On-box: `/sgl-workspace/aiter/aiter/ops/flydsl/moe_kernels.py` (`flydsl_moe_stage1`,

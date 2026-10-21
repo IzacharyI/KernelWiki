@@ -12,23 +12,17 @@ performance_status: not_measured_in_kernelwiki
 
 # Prefill and full attention — AITER flydsl
 
-Tiled attention interleaves QK products, online softmax and probability-value products. Causal/variable-length masks, dropout or backward outputs distinguish entry points with similar names.
+Tiled attention interleaves QK products, online softmax and probability-value products. Inference paths require the correct causal or variable-length mask, head layout and KV-cache contract. Use forward entry points with dropout disabled.
 
 FlyDSL wrappers compile and cache specialized builders. The builder, layout helpers and wrapper arguments jointly define the implementation. Separate first-use compilation from steady-state timing.
 
 ## Scope and evidence
 
+This page selects LLM inference paths. Shared upstream files and test suites can also contain training code; use their forward cases with gradients and dropout disabled. Explicit gradient-only implementations, tests and configurations are omitted.
+
 The source links below are pinned to AITER `e9995854abbd`. **Recent** means the file changed between 2026-07-21 and this snapshot. The symbol lists and parameter names are extracted from source; they include helpers as well as entry points. They do not certify runtime dispatch, hardware support or a measured speedup.
 
 ## Implementation files and entry points
-
-### `aiter/ops/flydsl/fmha_bwd_gfx942.py`
-
-[Source](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/flydsl/fmha_bwd_gfx942.py) · **Recent**
-
-Source documentation: Host side of the FlyDSL varlen FMHA backward (d_qk=192, d_v=128, causal, bf16, gfx942). Grid planning plus cached CompiledFunction dispatch for the kernels in kernels/fmha_bwd_gfx942/fmha_bwd_core.py: a k_delta pre-pass (D = rowsum(dO*O)) and one fused k_bwd that carries all five backward GEMMs. The device code stays under kernels/ and everything host-side lives here.
-
-Symbols: [`_num_cu`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/flydsl/fmha_bwd_gfx942.py#L51), [`_interleave`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/flydsl/fmha_bwd_gfx942.py#L62), [`_split`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/flydsl/fmha_bwd_gfx942.py#L70), [`_plan`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/flydsl/fmha_bwd_gfx942.py#L78), [`flash_attn_varlen_bwd_d192_gfx942`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/flydsl/fmha_bwd_gfx942.py#L97).
 
 ### `aiter/ops/flydsl/fmha_kernels.py`
 
@@ -36,7 +30,7 @@ Symbols: [`_num_cu`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19a
 
 Source documentation: High-level FlyDSL Flash Attention APIs. flydsl_flash_attn_batch_func / flydsl_flash_attn_varlen_func dispatch by arch and dtype: gfx950 fp8 to kernels/fmha_gfx950, gfx1250 bf16/f16 to the m32x8 prefill kernel, anything else None so the caller falls through to CK/Triton. flydsl_flash_attn_func (gfx1201 / RDNA4) wraps the flash_attn_func_gfx1201 kernel with: - Build cache keyed by (num_heads, head_dim, causal, dtype, waves_per_eu, daz).
 
-Symbols: [`_torch_dtype_to_str`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/flydsl/fmha_kernels.py#L68), [`_get_kernel`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/flydsl/fmha_kernels.py#L77), [`flydsl_flash_attn_func`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/flydsl/fmha_kernels.py#L95), [`_check_out`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/flydsl/fmha_kernels.py#L226), [`_fp8_gfx950_supported`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/flydsl/fmha_kernels.py#L240), [`flydsl_flash_attn_varlen_func`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/flydsl/fmha_kernels.py#L312), [`flydsl_flash_attn_batch_func`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/flydsl/fmha_kernels.py#L443), [`flydsl_flash_attn_varlen_bwd`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/flydsl/fmha_kernels.py#L556).
+Symbols: [`_torch_dtype_to_str`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/flydsl/fmha_kernels.py#L68), [`_get_kernel`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/flydsl/fmha_kernels.py#L77), [`flydsl_flash_attn_func`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/flydsl/fmha_kernels.py#L95), [`_check_out`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/flydsl/fmha_kernels.py#L226), [`_fp8_gfx950_supported`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/flydsl/fmha_kernels.py#L240), [`flydsl_flash_attn_varlen_func`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/flydsl/fmha_kernels.py#L312), [`flydsl_flash_attn_batch_func`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/flydsl/fmha_kernels.py#L443).
 
 Parameters referenced in this file: `BLOCK_M`, `waves_per_eu`.
 
@@ -59,14 +53,6 @@ Source documentation: Flash Attention kernel for gfx1201 (RDNA4). Uses 16x16x16 
 Symbols: [`build_flash_attn_func_module_primary`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/flydsl/kernels/flash_attn_func_gfx1201.py#L27).
 
 Parameters referenced in this file: `BLOCK_M`, `BLOCK_N`, `BLOCK_N_OUT`, `BLOCK_SIZE`, `waves_per_eu`.
-
-### `aiter/ops/flydsl/kernels/fmha_bwd_gfx942/fmha_bwd_core.py`
-
-[Source](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/flydsl/kernels/fmha_bwd_gfx942/fmha_bwd_core.py) · **Recent**
-
-Source documentation: FlyDSL FMHA backward for MLA-style d_qk=192 / d_v=128, varlen THD, causal, bf16, gfx942. The MFMA primitive used everywhere is v_mfma_f32_16x16x16_bf16_1k: C[16m, 16n] += A[16m, 16k] . B[16n, 16k]^T k_bwd carries TWO JOB TYPES on one grid.
-
-Symbols: [`_mfma`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/flydsl/kernels/fmha_bwd_gfx942/fmha_bwd_core.py#L101), [`_exp2`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/flydsl/kernels/fmha_bwd_gfx942/fmha_bwd_core.py#L115), [`_zero4`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/flydsl/kernels/fmha_bwd_gfx942/fmha_bwd_core.py#L119), [`_elem`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/flydsl/kernels/fmha_bwd_gfx942/fmha_bwd_core.py#L123), [`_pack4_trunc`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/flydsl/kernels/fmha_bwd_gfx942/fmha_bwd_core.py#L128), [`_to_bf16`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/flydsl/kernels/fmha_bwd_gfx942/fmha_bwd_core.py#L143), [`_buffer_view`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/flydsl/kernels/fmha_bwd_gfx942/fmha_bwd_core.py#L149), [`_atom`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/flydsl/kernels/fmha_bwd_gfx942/fmha_bwd_core.py#L161), [`_ldv`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/flydsl/kernels/fmha_bwd_gfx942/fmha_bwd_core.py#L166), [`_ld1`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/flydsl/kernels/fmha_bwd_gfx942/fmha_bwd_core.py#L173), [`_stv`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/flydsl/kernels/fmha_bwd_gfx942/fmha_bwd_core.py#L180), [`_st1`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/flydsl/kernels/fmha_bwd_gfx942/fmha_bwd_core.py#L187), [`_bf16x4`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/flydsl/kernels/fmha_bwd_gfx942/fmha_bwd_core.py#L194), [`_packn_rne`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/flydsl/kernels/fmha_bwd_gfx942/fmha_bwd_core.py#L198), [`build`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/flydsl/kernels/fmha_bwd_gfx942/fmha_bwd_core.py#L224).
 
 ### `aiter/ops/flydsl/kernels/fmha_gfx1250/fmha_b16_buffer_managers.py`
 
@@ -156,7 +142,6 @@ Parameters referenced in this file: `BLOCK_M`, `BLOCK_N`, `BLOCK_SIZE`.
 
 Related tests for this operator family are listed below. Select the entry point and backend that match the implementation; the presence of a test does not mean KernelWiki ran it or that every backend is covered.
 
-- [op_tests/op_benchmarks/flydsl/bench_mha_bwd.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/op_benchmarks/flydsl/bench_mha_bwd.py)
 - [op_tests/op_benchmarks/flydsl/bench_mha_fwd.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/op_benchmarks/flydsl/bench_mha_fwd.py)
 - [op_tests/cpp/mha/compile.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/cpp/mha/compile.py)
 - [op_tests/op_benchmarks/triton/bench_attn_res.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/op_benchmarks/triton/bench_attn_res.py)
@@ -171,7 +156,6 @@ Related tests for this operator family are listed below. Select the entry point 
 - [op_tests/test_fmha_fwd_with_sink_varlen_asm.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/test_fmha_fwd_with_sink_varlen_asm.py)
 - [op_tests/test_mha.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/test_mha.py)
 - [op_tests/test_mha_flydsl.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/test_mha_flydsl.py)
-- [op_tests/test_mha_flydsl_varlen_bwd.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/test_mha_flydsl_varlen_bwd.py)
 - [op_tests/test_mha_fp8.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/test_mha_fp8.py)
 - [op_tests/test_mha_native_splitkv.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/test_mha_native_splitkv.py)
 - [op_tests/test_mha_optional_flydsl.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/test_mha_optional_flydsl.py)
@@ -203,7 +187,7 @@ Related tests for this operator family are listed below. Select the entry point 
 
 ## Performance and validation
 
-Record sequence lengths, masks, heads and dtypes. Use the matching forward or backward reference; do not compare kernel latency with an end-to-end serving metric.
+Record sequence lengths, masks, heads and dtypes. Use the matching forward reference with dropout disabled; do not compare kernel latency with an end-to-end serving metric.
 
 No new GPU timings were collected for this page. Record GPU model, ROCm/compiler/library versions, full shape and strides, input/output dtypes, warmup and timing method, baseline implementation, latency and correctness tolerance before claiming a win. Compare speedups only within the same benchmark protocol and baseline.
 

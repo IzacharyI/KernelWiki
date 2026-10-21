@@ -17,10 +17,10 @@ sources:
 > **What this section is.** The *conceptual / strategy* layer of quantization for AMD MI GPUs:
 > which format, which granularity, which calibration method, which gate, which serving flags. It sits
 > **above** the bit-exact deep numerics already written per-operator:
-> - [operators/quant_dequant_fp8](../../operator/quant_dequant_fp8/README.md) — FP8 cast/dequant numerics (FNUZ vs OCP, 224 cap, amax/scale).
-> - [operators/quant_fp4_mxfp](../../operator/quant_fp4_mxfp/README.md) — MXFP4/6 block-floating-point numerics (E8M0, group 32, shuffle).
-> - [operators/quant_int8](../../operator/quant_int8/README.md), [operators/scaled_quant_gemm](../../operator/scaled_quant_gemm/README.md), [operators/fused_norm_quant](../../operator/fused_norm_quant/README.md),
->   [operators/kv_cache_quant](../../operator/kv_cache_quant/README.md) — the kernels that consume what these strategies produce.
+> - [operators/quant_dequant_fp8](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_dequant_fp8/README.md) — FP8 cast/dequant numerics (FNUZ vs OCP, 224 cap, amax/scale).
+> - [operators/quant_fp4_mxfp](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_fp4_mxfp/README.md) — MXFP4/6 block-floating-point numerics (E8M0, group 32, shuffle).
+> - [operators/quant_int8](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_int8/README.md), [operators/scaled_quant_gemm](../../operator/scaled_quant_gemm/README.md), [operators/fused_norm_quant](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/fused_norm_quant/README.md),
+>   [operators/kv_cache_quant](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/kv_cache_quant/README.md) — the kernels that consume what these strategies produce.
 >
 > **Do not duplicate** the per-operator numerics here. This layer answers *"what should I do and why,"*
 > and cross-links down to *"exactly how the bits behave."*

@@ -1,6 +1,6 @@
 # Taxonomy — controlled vocabularies
 
-These ids are authoritative. Use them verbatim in frontmatter and in `sota_registry.yaml`.
+This imported taxonomy explains historical GEAK metadata. The [LLM inference operator index](../../../operator/README.md) defines the active KernelWiki scope; historical training regimes and library backends below do not expand that scope.
 
 ## Hardware generations (`gen`)
 | id | arch | products |
@@ -35,7 +35,7 @@ These ids are authoritative. Use them verbatim in frontmatter and in `sota_regis
 **Embedding/sampling**: `embedding` · `lm_head_logits` · `sampling_topk_topp`
 **Elementwise/reduction/scan**: `elementwise` · `reduction` · `cumsum_scan` · `argmax_topk` ·
 `cast_fill_copy`
-**Conv**: `causal_conv1d` · `depthwise_conv` · `conv2d`
+**Causal state mixing**: `causal_conv1d` (Mamba / gated-delta inference)
 **Data movement**: `transpose` · `gather_scatter` · `all_to_all_dispatch_combine` · `paged_kv_copy` ·
 `layout_shuffle`
 **Quant ops**: `quant_dequant_fp8` · `quant_int8` · `quant_fp4_mxfp` · `kv_cache_quant`

@@ -112,8 +112,8 @@ pytest -sv /sgl-workspace/aiter/aiter/ops/flydsl/test_flydsl_moe_a4w4.py
 [operators/grouped_gemm_moe/backends/flydsl](../../grouped_gemm_moe/backend/flydsl.md) (standard fp8/bf16 2-stage) ·
 [operators/fused_moe_grouped_gemm/backends/aiter](aiter.md) (DB-driven A4W4 dispatch) ·
 [operators/fused_moe_grouped_gemm/backends/ck](ck.md) (block-scale stage2) ·
-[operators/act_and_mul_silu_gelu/backends/flydsl](../../act_and_mul_silu_gelu/backend/flydsl.md) (the fused silu+quant kernel) ·
-[operators/quant_fp4_mxfp](../../quant_fp4_mxfp/README.md) (MXFP4 quantization) · [operators/dense_gemm/backends/flydsl](../../dense_gemm/backend/flydsl.md).
+[operators/act_and_mul_silu_gelu/backends/flydsl](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/act_and_mul_silu_gelu/backend/flydsl.md) (the fused silu+quant kernel) ·
+[operators/quant_fp4_mxfp](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_fp4_mxfp/README.md) (MXFP4 quantization) · [operators/dense_gemm/backends/flydsl](../../dense_gemm/backend/flydsl.md).
 
 **Authoring / optimizing a FlyDSL MoE GEMM `@flyc.kernel`** (write from scratch OR port ck→flydsl):
 [languages/flydsl/authoring_gemm_levers](../../../general/backend/flydsl/authoring_gemm_levers.md) (tiling / LDS / XCD-swizzle / epilogue) ·

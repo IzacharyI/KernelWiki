@@ -18,6 +18,8 @@ Follow the public Python wrapper into the launchable Triton function. Tune only 
 
 ## Scope and evidence
 
+This page selects LLM inference paths. Shared upstream files and test suites can also contain training code; use their forward cases with gradients and dropout disabled. Explicit gradient-only implementations, tests and configurations are omitted.
+
 The source links below are pinned to AITER `e9995854abbd`. **Recent** means the file changed between 2026-07-21 and this snapshot. The symbol lists and parameter names are extracted from source; they include helpers as well as entry points. They do not certify runtime dispatch, hardware support or a measured speedup.
 
 ## Implementation files and entry points
@@ -52,16 +54,6 @@ Symbols: [`_prev_pow2`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b
 
 Parameters referenced in this file: `BLOCK_D`, `BLOCK_M`, `BLOCK_N`, `BLOCK_Q`, `num_stages`, `num_warps`, `waves_per_eu`.
 
-### `aiter/ops/triton/attention/sparse_attention_dsv4_bwd.py`
-
-[Source](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/sparse_attention_dsv4_bwd.py) · **Recent**
-
-Source documentation: DeepSeek-V4 sparse-MLA training BACKWARD (gfx950 / CDNA4). Counterpart to the DSv4 sparse prefill forward. The op is the official V4 form: shared-KV GQA where K == V == kv is a single dense 512-wide tensor, RoPE already applied in place caller-side, scale 1/sqrt(512), attn_sink folded into the softmax denominator only, and topk_indices == -1 masked out.
-
-Symbols: [`sparse_mla_bwd_dq`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/sparse_attention_dsv4_bwd.py#L61), [`sparse_mla_bwd_dkv_interm_v4`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/sparse_attention_dsv4_bwd.py#L114), [`delta_v4`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/sparse_attention_dsv4_bwd.py#L166), [`build_inverted_topk`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/sparse_attention_dsv4_bwd.py#L190), [`dkv_gather_acc`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/sparse_attention_dsv4_bwd.py#L220), [`_BwdPlan`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/sparse_attention_dsv4_bwd.py#L244), [`_plan_bwd`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/sparse_attention_dsv4_bwd.py#L292), [`_bwd_phases`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/sparse_attention_dsv4_bwd.py#L420), [`sparse_mla_bwd_dsv4`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/sparse_attention_dsv4_bwd.py#L482).
-
-Parameters referenced in this file: `BLOCK_E`, `BLOCK_H`, `BLOCK_R`, `num_warps`, `waves_per_eu`.
-
 ### `aiter/ops/triton/attention/sparse_mla.py`
 
 [Source](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/sparse_mla.py) · **Recent**
@@ -76,7 +68,7 @@ Parameters referenced in this file: `BLOCK_K`, `BLOCK_M`, `num_warps`, `waves_pe
 
 [Source](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/sparse_mla_dsv4_train.py) · **Recent**
 
-Symbols: [`_build_inverted_topk`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/sparse_mla_dsv4_train.py#L27), [`sparse_mla_fwd`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/sparse_mla_dsv4_train.py#L65), [`sparse_mla_bwd`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/sparse_mla_dsv4_train.py#L124), [`SparseMLADSV4Function`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/sparse_mla_dsv4_train.py#L251), [`sparse_mla_dsv4_train`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/sparse_mla_dsv4_train.py#L279).
+Symbols: [`_build_inverted_topk`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/sparse_mla_dsv4_train.py#L27), [`sparse_mla_fwd`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/sparse_mla_dsv4_train.py#L65), [`SparseMLADSV4Function`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/sparse_mla_dsv4_train.py#L251), [`sparse_mla_dsv4_train`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/attention/sparse_mla_dsv4_train.py#L279).
 
 Parameters referenced in this file: `BLOCK_D`, `BLOCK_G`, `BLOCK_H`, `BLOCK_K`, `num_stages`, `num_warps`.
 
@@ -108,21 +100,11 @@ Symbols: [`_get_lds_limit`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0
 
 Parameters referenced in this file: `BLOCK_D`, `BLOCK_H`, `BLOCK_K`, `BLOCK_SIZE`, `matrix_instr_nonkdim`, `num_stages`, `num_warps`, `waves_per_eu`.
 
-### `aiter/ops/triton/_triton_kernels/attention/sparse_attention_dsv4_bwd.py`
-
-[Source](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/attention/sparse_attention_dsv4_bwd.py) · **Recent**
-
-Source documentation: Triton kernels for the DeepSeek-V4 sparse-MLA training BACKWARD (gfx950 / CDNA4). The two memory-bound phases; the MFMA phases are Gluon and live in aiter.ops.triton._gluon_kernels.gfx950.attention.sparse_attention_dsv4_bwd. _delta_v4_kernel delta = rowsum(O * dO) -- the standard flash-attention "o_dot_do" preamble. Streams the bf16 inputs and accumulates in fp32, so it moves exactly the working set.
-
-Symbols: [`_delta_v4_kernel`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/attention/sparse_attention_dsv4_bwd.py#L37), [`_bwd_dkv_gather_acc_v4`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/attention/sparse_attention_dsv4_bwd.py#L66).
-
-Parameters referenced in this file: `BLOCK_E`, `BLOCK_R`.
-
 ### `aiter/ops/triton/_triton_kernels/attention/sparse_mla_dsv4_train.py`
 
 [Source](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/attention/sparse_mla_dsv4_train.py) · **Recent**
 
-Symbols: [`_sparse_mla_fwd_kernel`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/attention/sparse_mla_dsv4_train.py#L29), [`_bwd_dq_store_dp_kernel`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/attention/sparse_mla_dsv4_train.py#L149), [`_bwd_dkv_interm_kernel`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/attention/sparse_mla_dsv4_train.py#L278), [`_bwd_dkv_gather_kernel`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/attention/sparse_mla_dsv4_train.py#L364).
+Symbols: [`_sparse_mla_fwd_kernel`](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/aiter/ops/triton/_triton_kernels/attention/sparse_mla_dsv4_train.py#L29).
 
 Parameters referenced in this file: `BLOCK_D`, `BLOCK_G`, `BLOCK_H`, `BLOCK_K`, `num_stages`, `num_warps`.
 
@@ -157,12 +139,10 @@ Use the matching wrapper/config loader. These files are tuning choices, not stan
 Related tests for this operator family are listed below. Select the entry point and backend that match the implementation; the presence of a test does not mean KernelWiki ran it or that every backend is covered.
 
 - [op_tests/op_benchmarks/triton/bench_sparse_attention_dsv4.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/op_benchmarks/triton/bench_sparse_attention_dsv4.py)
-- [op_tests/op_benchmarks/triton/bench_sparse_attention_dsv4_bwd.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/op_benchmarks/triton/bench_sparse_attention_dsv4_bwd.py)
 - [op_tests/op_benchmarks/triton/bench_sparse_mla.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/op_benchmarks/triton/bench_sparse_mla.py)
 - [op_tests/op_benchmarks/triton/bench_sparse_mla_dsv4_train.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/op_benchmarks/triton/bench_sparse_mla_dsv4_train.py)
 - [op_tests/triton_tests/attention/test_pa_decode_sparse.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/triton_tests/attention/test_pa_decode_sparse.py)
 - [op_tests/triton_tests/attention/test_pa_prefill_sparse.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/triton_tests/attention/test_pa_prefill_sparse.py)
-- [op_tests/triton_tests/attention/test_sparse_attention_dsv4_bwd.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/triton_tests/attention/test_sparse_attention_dsv4_bwd.py)
 - [op_tests/triton_tests/attention/test_sparse_mla.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/triton_tests/attention/test_sparse_mla.py)
 - [op_tests/triton_tests/attention/test_sparse_mla_dsv4_train.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/triton_tests/attention/test_sparse_mla_dsv4_train.py)
 - [op_tests/triton_tests/attention/test_unified_attention_sparse_mla.py](https://github.com/ROCm/aiter/blob/e9995854abbd935f0190b19abebe9938b6b90cca/op_tests/triton_tests/attention/test_unified_attention_sparse_mla.py)

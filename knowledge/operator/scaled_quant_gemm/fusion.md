@@ -20,14 +20,14 @@ sources:
 
 ## Fusion neighbors
 - **Upstream norm+quant**: rmsnorm/layernorm producing fp8/fp4 + per-block scales directly into the GEMM
-  input → [../fused_norm_quant/overview.md](../fused_norm_quant/README.md),
-  [../quant_fp4_mxfp/overview.md](../quant_fp4_mxfp/README.md),
-  [../quant_dequant_fp8/overview.md](../quant_dequant_fp8/README.md).
+  input → [../fused_norm_quant/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/fused_norm_quant/README.md),
+  [../quant_fp4_mxfp/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_fp4_mxfp/README.md),
+  [../quant_dequant_fp8/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/quant_dequant_fp8/README.md).
 - **Epilogue bias/activation + output quant**: dequant accumulator, add bias, activation, re-quantize
   output to fp8/fp4 with new block scales → [../gemm_epilogue_fused/overview.md](../gemm_epilogue_fused/README.md).
 - **MoE**: scaled grouped GEMM with per-expert/per-block scales →
   [../grouped_gemm_moe/fusion.md](../grouped_gemm_moe/fusion.md).
-- **KV-cache quant** shares the fp8 quant machinery → [../kv_cache_quant/overview.md](../kv_cache_quant/README.md).
+- **KV-cache quant** shares the fp8 quant machinery → [../kv_cache_quant/overview.md](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/kv_cache_quant/README.md).
 
 ## Scale-pipeline note
 - Scales must be staged Global→LDS(re-layout)→LDS-read to feed scaled MFMA; there is no register-direct

@@ -1,14 +1,18 @@
 # moe_dispatch_combine
 
-1 current AITER implementation references; 0 historical experience cards.
+Expert-parallel dispatch, gather, reduction and combine.
+
+3 AITER implementation references; 0 historical experience cards.
 
 ## AITER implementations
 
-Source snapshot: `e9995854abbd`. These pages describe source and validation routes; they do not imply that every implementation has been benchmarked on every GPU.
+Each page pins its source revision. Source references describe implementations and validation routes; they do not establish a measured performance ranking.
 
 | Backend / provider entry | Reference |
 | --- | --- |
+| aiter | [All to all dispatch combine — AITER aiter](backend/aiter_aiter.md) |
 | flydsl | [MoE dispatch and combine — AITER flydsl](backend/flydsl_aiter.md) |
+| hip | [All to all dispatch combine — AITER hip](backend/hip_aiter.md) |
 
 ## Optimization experience
 
@@ -16,7 +20,7 @@ Source snapshot: `e9995854abbd`. These pages describe source and validation rout
 
 ## GEAK reference material
 
-The material below is imported from GEAK. Its backend status and performance statements belong to the original source dates. Use the AITER pages above for the current source snapshot.
+The material below is imported from GEAK. Its backend status and performance statements belong to the original source dates. Use the pinned AITER references where available to check current applicability.
 
 <details>
 <summary>Original GEAK metadata</summary>

@@ -59,7 +59,7 @@ utilization in `rocprofv3` shows transfer hidden under compute.
 
 ## Alternatives / cross-links
 [overview.md](../README.md) · [aiter.md](aiter.md) · [sglang_kernels.md](sglang_kernels.md) ·
-languages: `triton_amd` · core: [attention_prefill_fmha](../../attention_prefill_fmha/README.md) · collectives: [allgather](../../allgather/README.md) · [reduce_scatter](../../reduce_scatter/README.md).
+languages: `triton_amd` · core: [attention_prefill_fmha](../../attention_prefill_fmha/README.md) · collectives: [allgather](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/allgather/README.md) · [reduce_scatter](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/reduce_scatter/README.md).
 
 ## Sources
 - aiter Triton FA + merge: `ROCm/aiter@a6bb49937:aiter/ops/triton/_triton_kernels/attention/`, `attention/mla_decode.py` (on-box).

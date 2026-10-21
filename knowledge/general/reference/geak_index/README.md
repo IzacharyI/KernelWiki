@@ -1,5 +1,7 @@
 # perf_knowledge — AMD Instinct (MI-series) Kernel-Optimization Knowledge Base
 
+This is the historical GEAK collection overview. KernelWiki now focuses its [operator collection](../../../operator/README.md) on GEMM, MoE, attention and indexers; the original broad coverage and registry descriptions below are provenance, not current scope requirements.
+
 A knowledge base for **writing, selecting, and tuning the fastest kernel** for any operator on any
 AMD Instinct MI GPU (CDNA1 MI100 · CDNA2 MI200 · CDNA3 MI300A/X/325X · CDNA4 MI350X/355X).
 

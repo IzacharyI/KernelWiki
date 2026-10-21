@@ -28,7 +28,7 @@ hidden ─► [RMSNorm] ─► [QKV proj GEMM] ─► [RoPE + QK-norm] ─► [F
 - **QK-norm + RoPE + KV-write + quant**, fused. aiter ships a fused
   `qk-norm + RoPE + KV-cache-write + (fp8) quant` kernel — instead of four passes over Q/K you do one,
   writing the rotated+normed+quantized K/V straight into the paged cache. This is the single biggest
-  pre-attention fusion win on AMD serving (see [../rope/](../rope/README.md) and `backends/aiter/`).
+  pre-attention fusion win on AMD serving (see [../rope/](https://github.com/yueliu14/KernelWiki/blob/45cd3f5b51d16322db8dc301fa783148d323d27b/knowledge/operator/rope/README.md) and `backends/aiter/`).
 - **fp8 QKV**: quantize Q/K/V to fp8 in the projection epilogue so FMHA consumes fp8 directly
   (FNUZ on gfx942). Folds the quant into the prior GEMM's CShuffle epilogue.
 - **Bias / rotary as FMHA traits**: CK-Tile FMHA fuses bias (`bias.hpp`) and rotary (`rotary.hpp`) as
