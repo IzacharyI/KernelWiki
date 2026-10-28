@@ -33,8 +33,15 @@ authoring_languages:
 # cards speak to, so a TechLead that resolved `kk_operator` from the taxonomy
 # reaches the decision page instead of an unknown-family error. `grouped_gemm_moe`
 # is the taxonomy's grouped GEMM (one GEMM per expert over a sorted token layout)
-# and sits in its GEMM family; the fused MoE operator (`fused_moe_grouped_gemm`)
-# is in the MoE family and gets its own corpus.
+# and sits in its GEMM family.
+#
+# The MoE operators -- `fused_moe_grouped_gemm`, `moe_routing_topk`,
+# `moe_dispatch_combine` -- have NO family here yet, so resolving one raises
+# `no corpus family publishes operator/pattern ...`. That is the intended answer
+# rather than a gap to paper over: the fused MoE kernel is a routing-and-layout
+# problem whose decisions are not the dense GEMM's, and listing it under `gemm`
+# to avoid the error would hand a TechLead tiling advice for a kernel whose cost
+# is in the sort. A MoE family belongs in a later corpus with its own evidence.
 families:
   - id: gemm
     patterns:
